@@ -13,7 +13,7 @@
 
 This project supports bilingual interface with instant language switching:
 
-**[中文版 README](README.zh.md)** | **[English README](README.en.md)**
+**[中文版 README](README.md)** | **[English README](README.en.md)**
 
 ### 🔄 How to Switch Language
 
