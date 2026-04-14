@@ -1,5 +1,7 @@
 # douyin_one_spider
-> 🔥 抖音数据采集器 - 评论采集、作品采集、uid链接转换，GUI界面开箱即用。本软件为商业软件，提供日卡试用。
+> 🔥 抖音数据采集器 - ✅评论采集 ✅作品采集 ✅uid链接转换 | GUI界面开箱即用 | 本软件提供日卡试用
+>
+> [点这里即刻下载⬇️最新版](https://github.com/mashukui/douyin_one_spider/releases/)
 
 <p align="center">
 <a href="README.md">简体中文</a> | <a href="README.en.md">English</a>
@@ -184,14 +186,11 @@ def get_logger(self):
 ```
 **方式一：自助开通（推荐）**
 
-开通入口：https://mgnb.pro/product/douyin
+开通入口1：https://mgnb.pro/product/douyin
 
 **方式二：自助开通**
 
-开通入口：https://kjyjf.xetlk.com/s/36ksUh
-
-**方式三：手动开通，付费后加v（493882434）对接**
-<img width="2324" height="604" alt="收款码v5" src="https://github.com/user-attachments/assets/69c0d008-6077-420f-b24d-712f58d12fd5" />
+开通入口2：https://kjyjf.xetlk.com/s/36ksUh
 
 ## 4.2 一机一码
 为防止软件被恶意转卖，采用一机一码机制，一个卡密只能在一台电脑运行、不可多电脑运行。
@@ -202,6 +201,7 @@ def get_logger(self):
 软件由本人独立原创开发，长期维护更新，提供稳定运行。
 
 # 五、软件获取
-公众号"**老男孩的平凡之路**"，后台回复"**爬抖音聚合软件**"获取最新版软件安装包。
+公众号"**老男孩的平凡之路**"，后台回复"**爬抖音聚合软件**"获取最新版软件安装包。[点这里直接下载⬇️](https://github.com/mashukui/douyin_one_spider/releases/)
+
 <img width="1938" height="364" alt="二维码-公众号放底部v2" src="https://github.com/user-attachments/assets/011b8f02-0b3c-4748-9002-8cc007788bce" />
 
