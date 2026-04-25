@@ -1,10 +1,12 @@
 # douyin_one_spider
-> 🔥 抖音数据采集器 - ✅评论采集 ✅作品采集 ✅uid链接转换 | GUI界面开箱即用 | 本软件提供日卡试用
+> 🔥抖音数据采集器 - GUI界面开箱即用，提供日卡试用
 >
-> [点这里即刻下载⬇️最新版](https://github.com/mashukui/douyin_one_spider/releases/)
+> 🔧支持功能：✅关键词搜索作品 ✅评论筛选采集 ✅主页作品采集 ✅uid链接转换
+>
+> [👉🏻点这里下载最新版](https://github.com/mashukui/douyin_one_spider/releases/)
 
 <p align="center">
-<a href="README.md">简体中文</a> | <a href="README.en.md">English</a>
+<a href="README.md">简体中文 README</a> | <a href="README.en.md">English README</a>
 </p>
 
 # 一、背景分析与结果展示
@@ -179,18 +181,13 @@ def get_logger(self):
 ## 4.1 卡密说明
 付费如下：
 ```python
-日卡：使用期限1天，39元。日卡仅能购买一次。适合试用等临时需求
-月卡：使用期限1个月，149元。月卡可多次购买。适合短期采集需求
-季卡：使用期限3个月，399元。季卡可多次购买。适合中期采集需求
-年卡：使用期限1年，799元。年卡可多次购买。适合长期采集需求
+日卡：使用期限1天，39元。适合试用等临时需求
+月卡：使用期限1个月，149元。适合短期采集需求
+季卡：使用期限3个月，399元。适合中期采集需求
+年卡：使用期限1年，799元。适合长期采集需求
 ```
-**方式一：自助开通（推荐）**
 
-开通入口1：https://mgnb.pro/product/douyin
-
-**方式二：自助开通**
-
-开通入口2：https://kjyjf.xetlk.com/s/36ksUh
+开通入口：https://mgnb.pro/product/douyin
 
 ## 4.2 一机一码
 为防止软件被恶意转卖，采用一机一码机制，一个卡密只能在一台电脑运行、不可多电脑运行。
@@ -201,7 +198,7 @@ def get_logger(self):
 软件由本人独立原创开发，长期维护更新，提供稳定运行。
 
 # 五、软件获取
-公众号"**老男孩的平凡之路**"，后台回复"**爬抖音聚合软件**"获取最新版软件安装包。[点这里直接下载⬇️](https://github.com/mashukui/douyin_one_spider/releases/)
+公众号"**老男孩的平凡之路**"，后台回复"**爬抖音聚合软件**"获取最新版软件安装包。[或点这里直接下载](https://github.com/mashukui/douyin_one_spider/releases/)
 
 <img width="1938" height="364" alt="二维码-公众号放底部v2" src="https://github.com/user-attachments/assets/011b8f02-0b3c-4748-9002-8cc007788bce" />
 
