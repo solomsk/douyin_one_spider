@@ -1,204 +1,227 @@
 # douyin_one_spider
-> 🔥抖音数据采集器 - GUI界面开箱即用，提供日卡试用
->
-> 🔧支持功能：✅关键词搜索作品 ✅评论筛选采集 ✅主页作品采集 ✅uid链接转换
->
-> [👉🏻点这里下载最新版](https://github.com/mashukui/douyin_one_spider/releases/)
+
+> 🔥 抖音聚合采集软件：GUI 界面开箱即用，支持关键词作品采集、评论采集、主页作品采集、链接与 uid 转换。
+
+[⬇️ 下载最新版](https://github.com/mashukui/douyin_one_spider/releases/) | [💳 开通使用](https://mgnb.pro/product/douyin) | [🎬 使用演示](https://www.bilibili.com/video/BV1tkiZBiEyn/)
+
+本仓库用于软件介绍、版本发布、使用说明和问题反馈。软件暂不开放完整源码，可在[Releases](https://github.com/mashukui/douyin_one_spider/releases/)下载 Windows / macOS 客户端使用。
 
 <p align="center">
-<a href="README.md">简体中文 README</a> | <a href="README.en.md">English README</a>
+  <a href="README.md">简体中文 README</a> | <a href="README.en.md">English README</a>
 </p>
 
-# 一、背景分析与结果展示
-## 1.1 开发背景
-我是[@马哥python说](https://github.com/mashukui)，一枚10年+程序猿，现全职独立开发。
-<img width="1015" height="184" alt="抖音slogon" src="https://github.com/user-attachments/assets/d7179111-e4ae-458f-86ce-7cee0231e55d" />
+## 👋 软件简介
 
-抖音是国内极具影响力的短视频社交平台，靠着强互动性和庞大的达人创作者群体，已然成为热点事件发酵、优质内容传播的领域。之前，为了满足大家不同的数据采集需求，我分别独立开发了三款软件：针对评论采集的“[爬抖音搜索评论软件](https://github.com/mashukui/douyin_search_comment_tool)”、专门采集特定达人内容的“[爬抖音博主软件](https://github.com/mashukui/douyin_user_post)”，还有专门转换链接uid的“[抖音转换工具](https://github.com/mashukui/dy_trans_tool)”。
+`douyin_one_spider` 是一款面向抖音数据采集场景的桌面 GUI 工具，整合了评论采集、主页作品采集、链接转换等常用能力。用户无需配置 Python 环境，下载客户端后登录即可使用。
 
-这三款软件采集起来挺稳定、数据也全，但部分用户反馈，要是又想采评论又想采主页作品，来回切换软件，用着有点麻烦。为了解决这个问题，我把这三款软件整合到一起了，推出了全新的“**爬抖音聚合软件v1.0**”。这款软件把评论采集、达人主页采集、链接转换这三个核心功能都包含了，提供一站式搞定的抖音数据采集方案。
+它适合以下场景：
 
-## 1.2 适用人群与场景
-软件适用于：
-- 获客截流：从相关行业、品牌热门作品下的评论区精准采集目标用户；
-- 数据分析：采集抖音话题数据，用于社会舆情挖掘、网络传播研究等；
-- 内容创作：分析优质博主的内容风格、热门话题，为自身创作提供参考；
-- 抖音运营：不同格式链接/uid转换，需要跨工具协作的从业者。
+| 场景 | 说明 |
+| --- | --- |
+| ✅ 获客截流 | 从行业、品牌、竞品相关作品评论区采集潜在用户线索 |
+| ✅ 舆情分析 | 采集关键词相关作品与评论，用于热点事件、传播趋势分析 |
+| ✅ 内容创作 | 分析优质博主作品、互动数据和选题方向 |
+| ✅ 抖音运营 | 进行主页链接、抖音号、uid、作品链接等格式转换 |
 
-## 1.3 结果展示
-**【功能1】采集评论**
+## ⚙️ 功能概览
+
+| 功能 | 说明 | 输出 |
+| --- | --- | --- |
+| ✅ 关键词作品采集 | 按关键词搜索抖音作品，采集作品基础数据 | CSV |
+| ✅ 评论采集 | 根据关键词搜索结果或指定作品链接采集评论 | CSV |
+| ✅ 主页作品采集 | 根据达人主页链接采集主页作品列表 | CSV、视频文件 |
+| ✅ 链接与 uid 转换 | 支持主页链接、抖音号、uid、作品链接之间的转换 | 界面结果 |
+| ✅ 自动保存 | 每采集一页立即写入 CSV，降低中断丢数风险 | CSV |
+| ✅ 运行日志 | 自动记录运行过程，便于排查问题 | logs 日志文件 |
+
+## 🚀 快速开始
+
+1. 打开 [Releases](https://github.com/mashukui/douyin_one_spider/releases/) 下载最新版软件。
+2. 解压后运行对应系统的客户端。
+3. 使用软件内置的 cookie 小工具完成 cookie 配置。
+4. 登录软件账号。
+5. 选择采集模块，填写关键词、作品链接或主页链接。
+6. 点击「开始执行」，等待采集完成。
+7. 在软件所在目录查看 CSV、视频文件和日志文件。
+
+## 💻 支持系统
+
+| 系统 | 支持情况 |
+| --- | --- |
+| Windows | 支持，下载 Windows 客户端即可运行 |
+| macOS | 支持，下载 macOS 客户端即可运行 |
+| Python 环境 | 不需要用户自行安装或配置 |
+
+## 🖼️ 功能展示
+
+### 关键词作品与评论采集
 
 采集评论界面：
+
 ![功能1：采集评论](https://files.mdnice.com/user/32110/fccf81db-b4bb-4c1e-8a51-fcbb591b2dad.jpg)
 
-采集到的作品数据：（共13个字段，含：关键词,页码,视频标题,视频链接,作者昵称,作者uid,作者链接,作者粉丝数,发布时间,点赞数,评论数,收藏数,转发数）
+搜索作品结果：
+
 ![搜索作品.csv](https://files.mdnice.com/user/32110/aa5fe290-124d-4a22-9a1b-a684016506ed.png)
 
-采集到的评论数据：（共11个字段，含：目标链接,页码,评论者昵称,评论者id,评论者uid,评论者主页链接,评论时间,评论IP属地,评论点赞数,评论级别,评论内容）
+评论采集结果：
+
 ![评论.csv](https://files.mdnice.com/user/32110/3f4b82e7-2d00-4aa2-a773-95930fe4db6c.png)
 
-**【功能2】根据主页链接采集作品**
+### 主页作品采集
 
-采集主页作品界面：
+主页作品采集界面：
+
 ![功能2：采集主页作品](https://files.mdnice.com/user/32110/4fde9d50-df4e-42ed-b5a7-bf50c4f91872.jpg)
 
-采集主页作品结果：（含17个字段，含：页码,作者昵称,uid,sec_uid,作者链接,作者粉丝数,视频标题,视频标签,视频链接,发布时间,视频时长,是否置顶,点赞数,评论数,收藏数,推荐数,转发数）
+主页作品结果：
+
 ![主页作品数据.csv](https://files.mdnice.com/user/32110/0d71bdf1-4e70-4f2c-82ee-1fb093adf649.png)
 
-采集到的主页视频文件：
+自动下载的视频文件：
+
 ![自动下载的视频文件](https://files.mdnice.com/user/32110/4b10d3c8-c5fb-4c8c-8b97-c5dff4c27793.png)
 
-**【功能3】链接与uid转换**
+### 链接与 uid 转换
 
-转换功能1：主页链接转抖音号
+主页链接转抖音号：
+
 ![转换功能1：主页链接转抖音号](https://files.mdnice.com/user/32110/b6b84b34-195f-435f-9352-beddcdb16115.jpg)
 
-转换功能2：抖音号转主页链接（含uid）
+抖音号转主页链接：
+
 ![转换功能2：抖音号转主页链接（uid）](https://files.mdnice.com/user/32110/a164b591-db0b-434e-8db9-557547830809.jpg)
 
-转换功能3：app端作品链接转pc端作品链接
+App 端作品链接转 PC 端作品链接：
+
 ![转换功能3：app端作品链接转pc端作品链接](https://files.mdnice.com/user/32110/ba34dce4-724d-4f5b-be0d-3efc418b3be8.jpg)
 
+## 📊 输出字段
 
-## 1.4 软件说明
+软件会根据不同采集模块生成对应的 CSV 文件。字段较多，下面先按数据类型展示主要字段范围；需要完整字段时，可展开查看。
 
-几点说明，请详读：
-1. Windows系统、Mac系统均可直接运行，无需配置编程环境
-2. 软件含三个核心功能：①根据关键词/作品链接采集评论；②根据主页链接采集作品；③uid转换
-3. 软件通过接口协议采集，并非通过模拟浏览器等RPA类，稳定性较高
-4. 软件运行完成后，会在当前文件夹（即，软件所在文件夹）生成csv结果文件
-5. 采集过程中，每采集一页，存一次csv。并非采完最后一次性保存！防止因异常中断导致丢失前面的数据（每页请求间隔1~2s）
-6. 采集过程中，有log文件详细记录运行过程，方便回溯
+### 搜索作品数据
 
-# 二、主要技术
-## 2.1 模块分工
-软件全部模块采用python语言开发，主要分工如下： 
-```python
-tkinter：GUI软件界面
-requests：发送请求
-json：解析返回的响应数据
-pandas：保存csv数据结果
-logging：运行过程中日志记录
-```
-出于版权考虑，暂不公开源码，仅向用户提供软件使用。 
+- 采集信息：关键词、页码
+- 作品信息：视频标题、视频链接、发布时间
+- 作者信息：作者昵称、作者 uid、作者主页链接、作者粉丝数
+- 互动数据：点赞数、评论数、收藏数、转发数
 
-## 2.2 部分代码
+<details>
+<summary>查看搜索作品完整字段</summary>
 
-部分代码实现： 
+关键词、页码、视频标题、视频链接、作者昵称、作者 uid、作者链接、作者粉丝数、发布时间、点赞数、评论数、收藏数、转发数
 
-发送请求并解析数据：
-```python
-# 发送请求
-r = requests.get(url, headers=h1, params=params)
-# 解析数据
-json_data = r.json()
-```
-解析响应数据，以“评论内容”字段为例：
-```python
-for comment in comment_list:
-	# 评论内容
-	text = comment['text']
-	text_list.append(text)
-```
-保存结果数据到csv文件：
-```python
-# 保存数据到DF
-df = pd.DataFrame(
-	{
-		'目标链接': 'https://www.douyin.com/video/' + str(video_id),
-		'页码': page,
-		'评论者昵称': user_name_list,
-		'评论者id': user_unique_id_list,
-		'评论者uid': uid_list,
-		'评论者主页链接': user_url_list,
-		'评论时间': create_time_list,
-		'评论IP属地': ip_list,
-		'评论点赞数': like_count_list,
-		'评论级别': cmt_level_list,
-		'评论内容': text_list,
-	}
-)
-# 保存到csv
-if os.path.exists(self.result_file2):  # 如果文件存在，不再设置表头
-	header = False
-else:  # 否则，设置csv文件表头
-	header = True
-df.to_csv(self.result_file2, mode='a+', index=False, header=header, encoding='utf_8_sig')
-self.tk_show('视频[{}]第{}页评论已保存: {}'.format(video_id, page, self.result_file2))
-```
-底部版权声明：
-```python
-# 版权信息
-copyright = tk.Label(root, text='@马哥python说 All rights reserved.', font=('仿宋', 10), fg='grey')
-copyright.place(x=290, y=625)
-```
-日志记录模块：
-```python
-def get_logger(self):
-    self.logger = logging.getLogger(__name__)
-    # 日志格式
-    formatter = '[%(asctime)s-%(filename)s][%(funcName)s-%(lineno)d]--%(message)s'
-    # 日志级别
-    self.logger.setLevel(logging.DEBUG)
-    # 控制台日志
-    sh = logging.StreamHandler()
-    log_formatter = logging.Formatter(formatter, datefmt='%Y-%m-%d %H:%M:%S')
-    # info日志文件名
-    info_file_name = time.strftime("%Y-%m-%d") + '.log'
-    # 将其保存到特定目录
-    case_dir = r'./logs/'
-    info_handler = TimedRotatingFileHandler(filename=case_dir + info_file_name,
-                                        when='MIDNIGHT',
-                                        interval=1,
-                                        backupCount=7,
-                                        encoding='utf-8')
-```
+</details>
 
-# 三、功能与使用
-## 3.1 一键配置cookie
-开始采集前，先用内置的《cookie小工具》自动配置好cookie。
-![e957cdad01973bcbab9f5fa95ae598fa](https://github.com/user-attachments/assets/1ce912fd-1123-4ae2-8fa9-4618dc3d96e9)
+### 评论数据
 
-这样，获取到的cookie值就自动写入cookie.txt文件中了，告别繁琐的手动获取。
+- 采集信息：目标链接、页码
+- 评论者信息：评论者昵称、评论者 id、评论者 uid、评论者主页链接
+- 评论信息：评论时间、评论 IP 属地、评论点赞数、评论级别、评论内容
 
-## 3.2 软件登录
-用户登录界面：需要登录。
+<details>
+<summary>查看评论完整字段</summary>
 
-## 3.3 启动采集
+目标链接、页码、评论者昵称、评论者 id、评论者 uid、评论者主页链接、评论时间、评论 IP 属地、评论点赞数、评论级别、评论内容
 
-1）登录成功之后，选择需要的功能模块（搜索帖子/博主帖子/评论）；
+</details>
 
-2）设置相关参数（如关键词、时间范围、博主链接等）；
+### 主页作品数据
 
-3）点击「开始执行」，等待采集完成（可实时查看采集进度）；
+- 采集信息：页码
+- 作者信息：作者昵称、uid、sec_uid、作者主页链接、作者粉丝数
+- 作品信息：视频标题、视频标签、视频链接、发布时间、视频时长、是否置顶
+- 互动数据：点赞数、评论数、收藏数、推荐数、转发数
 
-4）采集完成后，在默认的当前文件夹中查看csv数据文件或视频下载等。
+<details>
+<summary>查看主页作品完整字段</summary>
 
-## 3.4 演示视频
-软件使用的完整过程演示视频：[【工具演示】爬抖音聚合软件](https://mp.weixin.qq.com/s/fDb21Rj_kKb_1GNHAJWyIQ)
+页码、作者昵称、uid、sec_uid、作者链接、作者粉丝数、视频标题、视频标签、视频链接、发布时间、视频时长、是否置顶、点赞数、评论数、收藏数、推荐数、转发数
 
-# 四、付费说明
-## 4.1 卡密说明
-付费如下：
-```python
-日卡：使用期限1天，39元。适合试用等临时需求
-月卡：使用期限1个月，149元。适合短期采集需求
-季卡：使用期限3个月，399元。适合中期采集需求
-年卡：使用期限1年，799元。适合长期采集需求
-```
+</details>
 
-开通入口：https://mgnb.pro/product/douyin
+## 🛠️ 技术说明
 
-## 4.2 一机一码
-为防止软件被恶意转卖，采用一机一码机制，一个卡密只能在一台电脑运行、不可多电脑运行。
-## 4.3 软件多开
-一台电脑仅允许运行一个软件，不支持软件多开。
+软件采用 Python 开发，核心模块包括：
 
-## 4.4 软件维护
-软件由本人独立原创开发，长期维护更新，提供稳定运行。
+| 模块 | 用途 |
+| --- | --- |
+| tkinter | GUI 软件界面 |
+| requests | 接口请求 |
+| json | 响应数据解析 |
+| pandas | CSV 数据保存 |
+| logging | 运行日志记录 |
 
-# 五、软件获取
-公众号"**老男孩的平凡之路**"，后台回复"**爬抖音聚合软件**"获取最新版软件安装包。[或点这里直接下载](https://github.com/mashukui/douyin_one_spider/releases/)
+软件通过接口协议采集数据，不依赖模拟浏览器等 RPA 操作。采集过程中默认按页保存结果，每页请求间隔约 1-2 秒，便于控制采集节奏并降低异常中断造成的数据损失。
 
-<img width="1938" height="364" alt="二维码-公众号放底部v2" src="https://github.com/user-attachments/assets/011b8f02-0b3c-4748-9002-8cc007788bce" />
+## 💰 价格说明
 
+| 类型 | 使用期限 | 价格 | 适用场景 |
+| --- | --- | --- | --- |
+| 日卡 | 1 天 | 39 元 | 临时试用、小批量任务 |
+| 月卡 | 1 个月 | 149 元 | 短期采集需求 |
+| 季卡 | 3 个月 | 399 元 | 中期采集需求 |
+| 年卡 | 1 年 | 799 元 | 长期稳定使用 |
+
+开通入口：[https://mgnb.pro/product/douyin](https://mgnb.pro/product/douyin)
+
+## 🔐 授权规则
+
+- 软件采用一机一码机制，一个卡密仅支持一台电脑使用。
+- 一台电脑仅允许运行一个软件实例，不支持多开。
+- 软件由作者长期维护，后续版本通过 GitHub Releases 发布。
+
+## ❓ 常见问题
+
+### 是否需要安装 Python？
+
+不需要。软件已打包为桌面客户端，下载对应系统版本后即可运行。
+
+### cookie 是做什么用的？
+
+cookie 用于让软件以当前账号状态访问平台数据。请使用自己的账号 cookie，并妥善保管相关文件。
+
+### 采集中断后数据会丢失吗？
+
+软件按页保存 CSV，不是等全部采集结束后才保存。即使中途中断，已完成页的数据通常仍会保留在结果文件中。
+
+### 结果文件保存在哪里？
+
+默认保存在软件所在文件夹。日志文件保存在 `logs` 目录下。
+
+### 支持采集多少数据？
+
+实际可采集数量会受到关键词、账号状态、平台接口返回、网络环境和采集频率等因素影响。建议合理设置采集范围和请求间隔。
+
+### 软件报错怎么办？
+
+请优先查看 `logs` 目录下的日志文件，并在反馈时提供以下信息：
+
+- 软件版本
+- 操作系统
+- 使用的功能模块
+- 输入的关键词、主页链接或作品链接
+- 报错截图
+- 对应时间段的日志内容
+
+## ⚠️ 合规声明
+
+本软件仅供合法合规的数据分析、学习研究和自有业务场景使用。使用者应自行遵守目标平台服务协议、隐私政策以及所在地法律法规。
+
+请勿将本软件用于以下用途：
+
+- 高频、恶意或破坏性请求
+- 未经授权采集、传播或售卖个人敏感信息
+- 侵犯平台、作者或用户合法权益的行为
+- 违反法律法规或平台规则的其他行为
+
+因使用者不当使用造成的风险和责任，由使用者自行承担。
+
+## 📦 获取软件
+
+- GitHub Releases：[https://github.com/mashukui/douyin_one_spider/releases/](https://github.com/mashukui/douyin_one_spider/releases/)
+- 公众号：`老男孩的平凡之路`
+- 公众号后台回复：`爬抖音聚合软件`
+
+<img alt="二维码-公众号放底部v2" src="https://github.com/user-attachments/assets/011b8f02-0b3c-4748-9002-8cc007788bce" />
