@@ -1,363 +1,227 @@
-# Douyin One Spider - Douyin Data Collection Tool
+# douyin_one_spider
 
-**Author:** [@马哥python说](https://github.com/mashukui)  
-**Version:** v1.0  
-**License:** Commercial Software  
-**Language:** Python 3.x
+> 🔥 Douyin all-in-one data collection software: a ready-to-use GUI tool for keyword-based video collection, comment collection, creator profile video collection, and link / uid conversion.
 
----
+[⬇️ Download Latest Release](https://github.com/mashukui/douyin_one_spider/releases/) | [💳 Purchase Access](https://mgnb.pro/product/douyin) | [🎬 Video Demo](https://www.bilibili.com/video/BV1tkiZBiEyn/)
 
-## 🌐 Language Switcher
+This repository is used for software introduction, release distribution, usage documentation, and issue feedback. The complete source code is not publicly available for copyright reasons. You can download the Windows / macOS client from Releases.
 
-**中文 / English**
+<p align="center">
+  <a href="README.md">简体中文 README</a> | <a href="README.en.md">English README</a>
+</p>
 
-This project supports bilingual interface with instant language switching:
+## 👋 Overview
 
-**[中文版 README](README.md)** | **[English README](README.en.md)**
+`douyin_one_spider` is a desktop GUI tool designed for Douyin data collection scenarios. It combines comment collection, creator profile video collection, and link conversion into one client. Users do not need to install or configure a Python environment. Download the client, log in, and start using it.
 
-### 🔄 How to Switch Language
+It is suitable for the following scenarios:
 
-1. **Read in English** - Use this README for English documentation
-2. **Read in Chinese** - Switch to Chinese version for localized content
+| Scenario | Description |
+| --- | --- |
+| ✅ Lead generation | Collect potential leads from comments under industry, brand, or competitor-related videos |
+| ✅ Public opinion analysis | Collect keyword-related videos and comments for topic tracking and communication analysis |
+| ✅ Content research | Analyze high-quality creators, interaction data, and content topics |
+| ✅ Douyin operations | Convert profile links, Douyin IDs, uids, and video links between different formats |
 
-Both versions contain the same features and documentation, just in different languages.
+## ⚙️ Features
 
----
+| Feature | Description | Output |
+| --- | --- | --- |
+| ✅ Keyword video collection | Search Douyin videos by keyword and collect basic video data | CSV |
+| ✅ Comment collection | Collect comments from keyword search results or specified video links | CSV |
+| ✅ Creator profile video collection | Collect video lists from creator profile links | CSV, video files |
+| ✅ Link and uid conversion | Convert between profile links, Douyin IDs, uids, and video links | GUI result |
+| ✅ Incremental saving | Save data to CSV after each page to reduce data loss caused by interruptions | CSV |
+| ✅ Runtime logs | Record runtime logs for troubleshooting | `logs` files |
 
-## 📋 Table of Contents
+## 🚀 Quick Start
 
-- [Overview](#overview)
-- [Features](#features)
-- [Use Cases](#use-cases)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Pricing](#pricing)
-- [Technical Details](#technical-details)
-- [FAQ](#faq)
+1. Open [Releases](https://github.com/mashukui/douyin_one_spider/releases/) and download the latest version.
+2. Extract the package and run the client for your operating system.
+3. Use the built-in cookie helper to configure your cookie.
+4. Log in to the software account.
+5. Select a collection module and enter a keyword, video link, or profile link.
+6. Click "Start" and wait for the collection task to finish.
+7. Check the CSV files, downloaded videos, and log files in the software directory.
 
----
+## 💻 Supported Platforms
 
-## 🎯 Overview
+| Platform | Support |
+| --- | --- |
+| Windows | Supported. Download and run the Windows client |
+| macOS | Supported. Download and run the macOS client |
+| Python environment | Not required for end users |
 
-**Douyin One Spider** is a comprehensive data collection tool for Douyin (TikTok China), designed for researchers, marketers, and content creators. This GUI application integrates three essential functions into one platform:
+## 🖼️ Screenshots
 
-- 📝 **Comment Collection** - Scrape comments from search results or specific videos
-- 🎬 **User Post Collection** - Extract posts from any Douyin user's homepage
-- 🔗 **Link & UID Conversion** - Convert between different Douyin link formats and user IDs
+### Keyword Video and Comment Collection
 
----
+Comment collection interface:
 
-## ✨ Features
+![Feature 1: Comment collection](https://files.mdnice.com/user/32110/fccf81db-b4bb-4c1e-8a51-fcbb591b2dad.jpg)
 
-### Feature 1: Comment Collection
+Collected video data:
 
-Collect comments from Douyin search results or specific videos.
+![Search videos CSV](https://files.mdnice.com/user/32110/aa5fe290-124d-4a22-9a1b-a684016506ed.png)
 
-**Collected Data Fields (11 fields):**
-- Target URL
-- Page Number
-- Commenter Nickname
-- Commenter ID
-- Commenter UID
-- Commenter Profile Link
-- Comment Time
-- Comment IP Location
-- Comment Likes
-- Comment Level
-- Comment Content
+Collected comment data:
 
-**Sample Data:**
-```csv
-目标链接,页码,评论者昵称,评论者id,评论者uid,评论者主页链接,评论时间,评论IP属地,评论点赞数,评论级别,评论内容
-https://www.douyin.com/video/7123456789,1,张三,zhangsan,7123456789,https://www.douyin.com/user/7123456789,2026-03-10 08:00:00,北京市,128,1,这个视频很不错！
-```
+![Comments CSV](https://files.mdnice.com/user/32110/3f4b82e7-2d00-4aa2-a773-95930fe4db6c.png)
 
-### Feature 2: User Post Collection
+### Creator Profile Video Collection
 
-Extract all posts from any Douyin user's homepage.
+Profile video collection interface:
 
-**Collected Data Fields (17 fields):**
-- Page Number
-- Author Nickname
-- UID
-- Sec_UID
-- Author Link
-- Followers Count
-- Video Title
-- Video Tags
-- Video Link
-- Publish Time
-- Video Duration
-- Is Pinned
-- Likes
-- Comments
-- Favorites
-- Shares
-- Recommendations
+![Feature 2: Profile video collection](https://files.mdnice.com/user/32110/4fde9d50-df4e-42ed-b5a7-bf50c4f91872.jpg)
 
-**Sample Data:**
-```csv
-页码,作者昵称,uid,sec_uid,作者链接,作者粉丝数,视频标题,视频标签,视频链接,发布时间,视频时长,是否置顶,点赞数,评论数,收藏数,推荐数,转发数
-1,科技达人,7123456789,MS4wLjABAAAA7123456789...,https://www.douyin.com/user/7123456789,125800,Python爬虫教程,编程,https://www.douyin.com/video/7123456789,2026-03-10 07:00:00,03:45,是,12500,890,3200,4500,6700
-```
+Profile video collection result:
 
-### Feature 3: Link & UID Conversion
+![Profile videos CSV](https://files.mdnice.com/user/32110/0d71bdf1-4e70-4f2c-82ee-1fb093adf649.png)
 
-Convert between different Douyin link formats and user IDs.
+Automatically downloaded video files:
 
-**Supported Conversions:**
-1. Homepage URL → Douyin ID (UID)
-2. Douyin ID → Homepage URL (with UID)
-3. App Link → PC Link
+![Downloaded videos](https://files.mdnice.com/user/32110/4b10d3c8-c5fb-4c8c-8b97-c5dff4c27793.png)
 
----
+### Link and uid Conversion
 
-## 💡 Use Cases
+Convert a profile link to a Douyin ID:
 
-This tool is ideal for:
+![Convert profile link to Douyin ID](https://files.mdnice.com/user/32110/b6b84b34-195f-435f-9352-beddcdb16115.jpg)
 
-- **Lead Generation:** Collect target users from comment sections of popular posts in your niche
-- **Data Analysis:** Scrape Douyin topic data for sentiment analysis, social media research, and trend tracking
-- **Content Research:** Analyze top creators' content styles and trending topics for inspiration
-- **Douyin Operations:** Convert between different link formats for cross-platform collaboration
+Convert a Douyin ID to a profile link:
 
----
+![Convert Douyin ID to profile link](https://files.mdnice.com/user/32110/a164b591-db0b-434e-8db9-557547830809.jpg)
 
-## 🚀 Installation
+Convert a mobile app video link to a PC video link:
 
-### System Requirements
+![Convert app video link to PC video link](https://files.mdnice.com/user/32110/ba34dce4-724d-4f5b-be0d-3efc418b3be8.jpg)
 
-- **Operating System:** Windows 10/11 or macOS 10.15+
-- **Python:** 3.7+ (not required - application includes Python runtime)
-- **RAM:** 4GB minimum
-- **Storage:** 500MB free space
+## 📊 Output Fields
 
-### Installation Steps
+The software generates different CSV files based on the selected collection module. Since there are many fields, the main field groups are shown first. You can expand the sections below to view the full field lists.
 
-1. **Download the latest version:**
-   - Visit: [https://github.com/mashukui/douyin_one_spider](https://github.com/mashukui/douyin_one_spider)
-   - Or scan the QR code in the "老男孩的平凡之路" (Old Boy's Ordinary Path) official account
+### Search Video Data
 
-2. **Extract the package:**
-   - Extract `douyin_one_spider_v1.0.zip` to your desired location
+- Collection info: keyword, page
+- Video info: video title, video link, published time
+- Author info: author nickname, author uid, author profile link, author followers
+- Interaction data: likes, comments, favorites, shares
 
-3. **Run the application:**
-   - Double-click `douyin_one_spider.exe` (Windows) or `DouyinOneSpider.app` (macOS)
-   - No additional configuration required
+<details>
+<summary>View full search video fields</summary>
 
----
+Keyword, page, video title, video link, author nickname, author uid, author link, author followers, published time, likes, comments, favorites, shares
 
-## 📖 Usage
+</details>
 
-### Step-by-Step Guide
+### Comment Data
 
-#### 1. Login
+- Collection info: target link, page
+- Commenter info: commenter nickname, commenter ID, commenter uid, commenter profile link
+- Comment info: comment time, comment IP location, comment likes, comment level, comment content
 
-Launch the application and log in with your Douyin account.
+<details>
+<summary>View full comment fields</summary>
 
-**Cookie Auto-Configuration:**
-The tool includes a built-in "Cookie Helper" that automatically configures your login cookies.
+Target link, page, commenter nickname, commenter ID, commenter uid, commenter profile link, comment time, comment IP location, comment likes, comment level, comment content
 
-1. Click "Cookie Helper" button
-2. Login to Douyin through the browser popup
-3. Cookie is automatically saved to `cookie.txt`
-4. No manual cookie editing required!
+</details>
 
-![Cookie Helper](https://private-user-images.githubusercontent.com/228842838/544637247-1ce912fd-1123-4ae2-8fa9-4618dc3d96e9.jpg)
+### Creator Profile Video Data
 
-#### 2. Select Function
+- Collection info: page
+- Author info: author nickname, uid, sec_uid, author profile link, author followers
+- Video info: video title, video tags, video link, published time, video duration, pinned status
+- Interaction data: likes, comments, favorites, recommendations, shares
 
-Choose one of three modes:
-- 🔍 Search Comments (search by keyword)
-- 👤 User Posts (extract posts from homepage)
-- 🔄 Link Conversion (convert link formats)
+<details>
+<summary>View full creator profile video fields</summary>
 
-#### 3. Configure Parameters
+Page, author nickname, uid, sec_uid, author link, author followers, video title, video tags, video link, published time, video duration, pinned status, likes, comments, favorites, recommendations, shares
 
-**For Comment Collection:**
-- Enter keywords to search
-- Set time range (optional)
-- Select number of pages to scrape
+</details>
 
-**For User Posts:**
-- Enter user's Douyin homepage URL
-- Select page range
+## 🛠️ Technical Notes
 
-**For Link Conversion:**
-- Paste the link you want to convert
-- Select conversion type
+The software is developed in Python. Core modules include:
 
-#### 4. Start Collection
+| Module | Purpose |
+| --- | --- |
+| tkinter | GUI interface |
+| requests | API requests |
+| json | Response parsing |
+| pandas | CSV export |
+| logging | Runtime logging |
 
-Click **"Start"** button and monitor progress in real-time.
-
-**Features:**
-- Real-time progress display
-- Automatic data saving (every page)
-- Detailed log file generation
-- CSV output format
-
-#### 5. Review Results
-
-After completion, check the CSV files in the same folder:
-- `comments_*.csv` - Collected comments
-- `posts_*.csv` - Collected posts
-- `logs/*.log` - Execution logs
-
-**Note:** Data is saved after each page (not all at once) to prevent data loss from unexpected interruptions.
-
----
+The software collects data through interface requests and does not rely on browser automation or RPA-style operations. During collection, results are saved by page by default. The request interval is usually about 1-2 seconds, which helps control the collection pace and reduce data loss caused by unexpected interruptions.
 
 ## 💰 Pricing
 
-### Subscription Plans
+| Plan | Duration | Price | Recommended Usage |
+| --- | --- | --- | --- |
+| Day pass | 1 day | 39 CNY | Trial use or small one-time tasks |
+| Monthly pass | 1 month | 149 CNY | Short-term collection needs |
+| Quarterly pass | 3 months | 399 CNY | Medium-term collection needs |
+| Yearly pass | 1 year | 799 CNY | Long-term stable use |
 
-| Plan | Duration | Price | Features |
-|------|----------|-------|----------|
-| **Daily Pass** | 1 day | ¥39 | Single use, suitable for trial |
-| **Monthly Pass** | 1 month | ¥149 | Multiple uses, short-term projects |
-| **Quarterly Pass** | 3 months | ¥399 | Multiple uses, medium-term projects |
-| **Yearly Pass** | 1 year | ¥799 | Multiple uses, long-term projects |
+Purchase page: [https://mgnb.pro/product/douyin](https://mgnb.pro/product/douyin)
 
-### Purchase Methods
+## 🔐 License and Activation Rules
 
-#### Method 1: Self-Service (Recommended)
-- **Platform:** [https://mgnb.pro/product/douyin](https://mgnb.pro/product/douyin)
-- **XET:** [https://kjyjf.xetlk.com/s/36ksUh](https://kjyjf.xetlk.com/s/36ksUh)
+- The software uses a one-device-one-license mechanism. One license key can only be used on one computer.
+- Only one software instance is allowed on a single computer. Multiple concurrent instances are not supported.
+- The software is maintained by the author, and future versions will be published through GitHub Releases.
 
-#### Method 2: Manual Payment
-- Contact via WeChat: 493882434
-- Send payment receipt
-- Receive activation code
+## ❓ FAQ
 
-### License Mechanism
+### Do I need to install Python?
 
-- **One-device activation:** Each license key is bound to one computer
-- **No multi-login:** Cannot run on multiple computers simultaneously
-- **Anti-resale:** Licenses are non-transferable
+No. The software is packaged as a desktop client. Download the version for your operating system and run it directly.
 
----
+### What is the cookie used for?
 
-## 🛠️ Technical Details
+The cookie allows the software to access platform data under your current account session. Please use your own account cookie and keep related files secure.
 
-### Architecture
+### Will collected data be lost if the task is interrupted?
 
-**Core Technologies:**
-- **GUI:** `tkinter` (Python built-in)
-- **HTTP Requests:** `requests`
-- **Data Parsing:** `json`
-- **CSV Export:** `pandas`
-- **Logging:** `logging`
+The software saves CSV files by page instead of waiting until the whole task is complete. If the task is interrupted, data from completed pages is usually still preserved in the result files.
 
-**Data Collection Method:**
-- Uses Douyin's official API protocol
-- NOT browser automation (no RPA/Selenium)
-- **Advantages:** Higher stability, faster speed, lower resource usage
+### Where are result files saved?
 
-### Code Structure
+By default, result files are saved in the software directory. Log files are saved in the `logs` directory.
 
-```python
-# Request and parse data
-r = requests.get(url, headers=headers, params=params)
-json_data = r.json()
+### How much data can it collect?
 
-# Parse comment content
-for comment in comment_list:
-    text = comment['text']
-    text_list.append(text)
+The actual amount of data depends on the keyword, account status, platform API response, network environment, and collection frequency. It is recommended to set a reasonable collection range and request interval.
 
-# Save to CSV
-df = pd.DataFrame({
-    'Target URL': f'https://www.douyin.com/video/{video_id}',
-    'Page': page,
-    'Commenter': user_name_list,
-    'Commenter ID': user_id_list,
-    'Commenter UID': uid_list,
-    'Comment Time': create_time_list,
-    'Comment IP': ip_list,
-    'Likes': like_count_list,
-    'Level': cmt_level_list,
-    'Content': text_list,
-})
-df.to_csv(self.result_file, mode='a+', index=False, encoding='utf_8_sig')
-```
+### What should I do if an error occurs?
 
-### Logging System
+Check the log files under the `logs` directory first. When reporting an issue, please provide:
 
-Logs are automatically generated in the `logs/` folder with the format:
-```
-[2026-03-10 08:00:00]-douyin_one_spider.py][collect_comments-156]--Starting comment collection...
-[2026-03-10 08:00:05]-douyin_one_spider.py][collect_comments-158]--Page 1 completed: 45 comments saved
-```
+- Software version
+- Operating system
+- Feature module used
+- Keyword, profile link, or video link entered
+- Error screenshot
+- Log content around the time when the error occurred
 
----
+## ⚠️ Compliance Statement
 
-## 📚 Documentation & Support
+This software is intended only for lawful data analysis, learning, research, and authorized business scenarios. Users are responsible for complying with the target platform's terms of service, privacy policy, and applicable laws and regulations.
 
-### Video Tutorial
+Do not use this software for:
 
-**[【Tool Demo】Douyin One Spider Collection Tool](https://mp.weixin.qq.com/s/fDb21Rj_kKb_1GNHAJWyIQ)**
+- High-frequency, malicious, or destructive requests
+- Unauthorized collection, distribution, or sale of sensitive personal information
+- Activities that infringe the lawful rights of platforms, creators, or users
+- Any other behavior that violates laws, regulations, or platform rules
 
-### Official Channels
+Users are solely responsible for risks and liabilities caused by improper use.
 
-- **GitHub:** [https://github.com/mashukui/douyin_one_spider](https://github.com/mashukui/douyin_one_spider)
-- **WeChat Official Account:** 老男孩的平凡之路
-- **Search "爬抖音聚合软件"** to get the latest version
+## 📦 Get the Software
 
-### FAQ
+- GitHub Releases: [https://github.com/mashukui/douyin_one_spider/releases/](https://github.com/mashukui/douyin_one_spider/releases/)
+- WeChat official account: `老男孩的平凡之路`
+- Reply in the WeChat official account: `爬抖音聚合软件`
 
-**Q: Is this software free?**  
-A: No, this is commercial software. See pricing section above.
-
-**Q: Does it work on both Windows and Mac?**  
-A: Yes! Both Windows 10/11 and macOS 10.15+ are supported.
-
-**Q: Do I need to know Python to use it?**  
-A: No! The application is GUI-based and requires no programming knowledge.
-
-**Q: Is data saved automatically?**  
-A: Yes! Data is saved after each page to prevent loss from interruptions.
-
-**Q: Can I use it on multiple computers?**  
-A: No, each license is bound to one computer. See license mechanism above.
-
-**Q: What format is the output?**  
-A: CSV format, compatible with Excel, Google Sheets, and other data analysis tools.
-
----
-
-## ⚠️ Important Notice
-
-### Legal & Ethical Use
-
-This tool is **for academic research and data analysis purposes ONLY**. Users must:
-
-1. Comply with all relevant laws and regulations
-2. Respect Douyin's Terms of Service
-3. Use data responsibly and ethically
-4. **NOT** use for commercial spam, harassment, or illegal activities
-
-### Disclaimer
-
-- **Author:** [@马哥python说](https://github.com/mashukui)
-- **All rights reserved**
-- Software is independently developed and maintained
-- Regular updates and bug fixes provided
-
----
-
-## 🙏 Acknowledgments
-
-Special thanks to all users who have provided feedback and support!
-
----
-
-## 📄 License
-
-Copyright © 2026 [@马哥python说](https://github.com/mashukui). All rights reserved.
-
----
-
-**Support:** If you encounter any issues, please contact via WeChat: 493882434  
-**Version:** v1.0  
-**Last Updated:** 2026-03-10
+<img alt="WeChat official account QR code" src="https://github.com/user-attachments/assets/011b8f02-0b3c-4748-9002-8cc007788bce" />
