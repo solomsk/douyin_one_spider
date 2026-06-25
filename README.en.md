@@ -2,7 +2,7 @@
 
 > 🔥 Douyin all-in-one data collection software: a ready-to-use GUI tool for keyword-based video collection, comment collection, creator profile video collection, and link / uid conversion.
 
-[⬇️ Download Latest Release](https://github.com/mashukui/douyin_one_spider/releases/) | [💳 Purchase Access](https://mgnb.pro/product/douyin) | [🎬 Video Demo](https://www.bilibili.com/video/BV1tkiZBiEyn/)
+[⬇️ Download Latest Release](https://github.com/mashukui/douyin_one_spider/releases/) | [🎬 Video Demo](https://www.bilibili.com/video/BV1tkiZBiEyn/) | [💳 Purchase Access](https://mgnb.pro/product/douyin)
 
 This repository is used for software introduction, release distribution, usage documentation, and issue feedback. The complete source code is not publicly available for copyright reasons. You can download the Windows / macOS client from Releases.
 
@@ -224,4 +224,5 @@ Users are solely responsible for risks and liabilities caused by improper use.
 - WeChat official account: `老男孩的平凡之路`
 - Reply in the WeChat official account: `爬抖音聚合软件`
 
-<img alt="WeChat official account QR code" src="https://github.com/user-attachments/assets/011b8f02-0b3c-4748-9002-8cc007788bce" />
+<img alt="二维码-公众号放底部v3" src="https://github.com/user-attachments/assets/2322b840-2b46-466f-811f-c230cf518d1b" />
+
