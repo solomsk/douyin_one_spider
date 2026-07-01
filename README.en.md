@@ -224,5 +224,5 @@ Users are solely responsible for risks and liabilities caused by improper use.
 - WeChat official account: `老男孩的平凡之路`
 - Reply in the WeChat official account: `爬抖音聚合软件`
 
-<img alt="二维码-公众号放底部v3" src="https://github.com/user-attachments/assets/2322b840-2b46-466f-811f-c230cf518d1b" />
+<img width="573" height="196" alt="二维码-公众号放底部v4" src="https://github.com/user-attachments/assets/a7fe9a6c-bb57-434a-9ca2-3e749b987aa0" />
 
