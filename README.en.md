@@ -2,7 +2,7 @@
 
 > 🔥 Douyin all-in-one data collection software: a ready-to-use GUI tool for keyword-based video collection, comment collection, creator profile video collection, and link / uid conversion.
 
-[⬇️ Download Latest Release](https://github.com/mashukui/douyin_one_spider/releases/) | [🎬 Video Demo](https://www.bilibili.com/video/BV1tkiZBiEyn/) | [💳 Purchase Access](https://mgnb.pro/product/douyin)
+[⬇️ Download Latest Release](https://github.com/mashukui/douyin_one_spider/releases/) | [🎬 Video Demo](https://www.bilibili.com/video/BV1tkiZBiEyn/) | [🏠Homepage](https://mashukui.github.io/douyin_one_spider/) | [💳 Purchase Access](https://mgnb.pro/product/douyin)
 
 This repository is used for software introduction, release distribution, usage documentation, and issue feedback. The complete source code is not publicly available for copyright reasons. You can download the Windows / macOS client from Releases.
 
