@@ -376,7 +376,7 @@
 
     .showcase {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) 340px;
+      grid-template-columns: minmax(0, 1.08fr) minmax(440px, .92fr);
       gap: 18px;
       align-items: start;
     }
@@ -391,8 +391,11 @@
 
     .gallery img {
       width: 100%;
-      height: auto;
+      aspect-ratio: 16 / 10;
+      height: clamp(320px, 32vw, 420px);
+      object-fit: contain;
       display: block;
+      background: color-mix(in srgb, var(--surface) 72%, var(--line));
     }
 
     .gallery-caption {
@@ -403,23 +406,25 @@
 
     .stack {
       display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 12px;
     }
 
     .mini-shot {
       display: grid;
-      grid-template-columns: 96px 1fr;
-      gap: 12px;
+      grid-template-columns: 82px 1fr;
+      gap: 10px;
       align-items: center;
       padding: 10px;
       border: 1px solid var(--line);
       border-radius: var(--radius);
       background: var(--surface);
       text-decoration: none;
+      min-height: 88px;
     }
 
     .mini-shot img {
-      width: 96px;
+      width: 82px;
       aspect-ratio: 4 / 3;
       object-fit: cover;
       border-radius: 9px;
@@ -435,6 +440,10 @@
       display: block;
       color: var(--muted);
       font-size: 13px;
+    }
+
+    .mini-shot span span {
+      line-height: 1.45;
     }
 
     .steps {
@@ -625,7 +634,8 @@
       .grid-4,
       .pricing,
       .faq,
-      .feature-list {
+      .feature-list,
+      .stack {
         grid-template-columns: 1fr 1fr;
       }
 
@@ -655,6 +665,10 @@
         font-size: 34px;
       }
 
+      .gallery img {
+        height: auto;
+      }
+
       .hero p {
         font-size: 16px;
       }
@@ -663,6 +677,7 @@
       .pricing,
       .faq,
       .feature-list,
+      .stack,
       .metrics {
         grid-template-columns: 1fr;
       }
