@@ -1,855 +1,930 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>抖音聚合采集 - Douyin One Spider</title>
-    <style>
-        :root {
-            --red: #fe2c55;
-            --dark: #1a1a2e;
-            --bg: #f8f9fa;
-            --card: #ffffff;
-            --text: #333333;
-            --muted: #666666;
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.7;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="抖音采集软件，支持关键词作品采集、评论采集、主页作品采集、视频下载、链接转换和 CSV 导出，Windows/macOS 免 Python 环境运行。">
+  <meta name="keywords" content="抖音采集软件,抖音爬虫,抖音评论采集,抖音作品采集,抖音主页采集,抖音视频下载,douyin crawler">
+  <meta property="og:title" content="抖音采集软件 - 关键词作品、评论、主页作品和视频下载工具">
+  <meta property="og:description" content="桌面 GUI 工具，支持抖音关键词作品、评论、主页作品、视频下载、链接转换和 CSV 导出。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://mashukui.github.io/douyin_one_spider/">
+  <meta property="og:image" content="https://mashukui.github.io/douyin_one_spider/images/s01.jpg">
+  <title>抖音采集软件 - 关键词作品、评论、主页作品和视频下载工具</title>
+  <style>
+    :root {
+      --bg: #f7f8fb;
+      --surface: #ffffff;
+      --surface-soft: #fff2f5;
+      --text: #17181c;
+      --muted: #646b76;
+      --line: #e6e9ef;
+      --accent: #e52b4f;
+      --accent-dark: #bd1e3d;
+      --green: #10745a;
+      --shadow: 0 18px 50px rgba(27, 31, 39, .10);
+      --radius: 14px;
+    }
 
-        /* ── Language Switcher ── */
-        .lang-switcher {
-            position: fixed;
-            top: 1rem;
-            right: 1rem;
-            z-index: 1000;
-            display: flex;
-            gap: 4px;
-            background: rgba(255,255,255,.85);
-            backdrop-filter: blur(8px);
-            border-radius: 20px;
-            padding: 4px;
-            box-shadow: 0 2px 8px rgba(0,0,0,.12);
-        }
-        .lang-btn {
-            border: none;
-            padding: 6px 14px;
-            border-radius: 16px;
-            font-size: .85rem;
-            font-weight: 600;
-            cursor: pointer;
-            background: transparent;
-            color: var(--muted);
-            transition: all .2s;
-            font-family: inherit;
-        }
-        .lang-btn.active {
-            background: var(--red);
-            color: #fff;
-        }
-        .lang-btn:hover:not(.active) {
-            background: #fee;
-            color: var(--red);
-        }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #121419;
+        --surface: #1a1d24;
+        --surface-soft: #251922;
+        --text: #f3f5f8;
+        --muted: #b0b7c3;
+        --line: #303541;
+        --accent: #ff4269;
+        --accent-dark: #ff6d8c;
+        --green: #7bd7bd;
+        --shadow: 0 18px 50px rgba(0, 0, 0, .28);
+      }
+    }
 
-        /* ── Language visibility ── */
-        html[lang="zh-CN"] .lang-en { display: none !important; }
-        html[lang="en"] .lang-zh { display: none !important; }
+    * {
+      box-sizing: border-box;
+    }
 
-        /* ── Hero ── */
-        .hero {
-            background: linear-gradient(135deg, #cc0044 0%, #fe2c55 50%, #ff4d6a 100%);
-            color: #fff;
-            padding: 4rem 2rem 3rem;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-        .hero::before {
-            content: "";
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
-            animation: pulse 4s ease-in-out infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 0.5; }
-            50% { transform: scale(1.1); opacity: 0.2; }
-        }
-        .hero h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.8rem;
-            position: relative;
-            z-index: 1;
-        }
-        .hero p {
-            font-size: 1.15rem;
-            opacity: .92;
-            max-width: 600px;
-            margin: 0 auto 1.5rem;
-            position: relative;
-            z-index: 1;
-        }
-        .hero .badges {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
-            position: relative;
-            z-index: 1;
-        }
-        .hero .badge {
-            background: rgba(255,255,255,.2);
-            backdrop-filter: blur(6px);
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: .9rem;
-        }
-        .hero .cta-btn {
-            display: inline-block;
-            margin-top: 1.8rem;
-            background: #fff;
-            color: var(--red);
-            padding: 14px 48px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 1.1rem;
-            position: relative;
-            z-index: 1;
-            transition: transform .15s, box-shadow .15s;
-        }
-        .hero .cta-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0,0,0,.2);
-        }
-        .hero .cta-sub {
-            display: block;
-            margin-top: .5rem;
-            font-size: .85rem;
-            opacity: .75;
-            position: relative;
-            z-index: 1;
-        }
+    html {
+      scroll-behavior: smooth;
+    }
 
-        /* ── Container ── */
-        .container {
-            max-width: 860px;
-            margin: 0 auto;
-            padding: 0 1.5rem 3rem;
-        }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+    }
 
-        /* ── Section ── */
-        .section {
-            background: var(--card);
-            border-radius: 12px;
-            padding: 2rem;
-            margin-top: 1.5rem;
-            box-shadow: 0 1px 4px rgba(0,0,0,.06);
-        }
-        .section h2 {
-            font-size: 1.35rem;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: .5rem;
-        }
-        .section h2 .icon { font-size: 1.3rem; }
+    a {
+      color: inherit;
+    }
 
-        /* ── Feature Grid ── */
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 1rem;
-        }
-        .feature-card {
-            background: #fafafa;
-            padding: 1.2rem;
-            border-radius: 10px;
-            border-left: 3px solid var(--red);
-        }
-        .feature-card h3 { font-size: 1rem; margin-bottom: .4rem; }
-        .feature-card p { font-size: .9rem; color: var(--muted); }
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: color-mix(in srgb, var(--surface) 90%, transparent);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--line);
+    }
 
-        /* ── Steps ── */
-        .steps { counter-reset: step; }
-        .step {
-            display: flex;
-            gap: 1rem;
-            align-items: flex-start;
-            padding: .8rem 0;
-            border-bottom: 1px solid #eee;
-        }
-        .step:last-child { border-bottom: none; }
-        .step-num {
-            counter-increment: step;
-            background: var(--red);
-            color: #fff;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: .9rem;
-            flex-shrink: 0;
-            margin-top: 2px;
-        }
-        .step-body h4 { font-size: 1rem; margin-bottom: .2rem; }
-        .step-body p { color: var(--muted); font-size: .9rem; }
-        .step-body a { color: var(--red); }
+    .nav {
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 14px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
 
-        /* ── Carousel ── */
-        .carousel {
-            position: relative;
-            overflow: hidden;
-            border-radius: 10px;
-            background: #1a1a2e;
-        }
-        .carousel-track {
-            display: flex;
-            align-items: flex-start;
-            transition: transform .4s ease;
-        }
-        .carousel-slide {
-            min-width: 100%;
-            position: relative;
-            line-height: 0;
-        }
-        .carousel-slide img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-        .carousel-caption-bar {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 52px;
-            color: #fff;
-            background: #1a1a2e;
-            border-top: 1px solid rgba(255,255,255,.12);
-            padding: .85rem 4.5rem;
-            font-size: .95rem;
-            font-weight: 600;
-            text-align: center;
-            line-height: 1.45;
-        }
-        .carousel-btn {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(255,255,255,.85);
-            border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            font-size: 1.1rem;
-            cursor: pointer;
-            z-index: 10;
-            transition: background .2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--dark);
-            box-shadow: 0 2px 8px rgba(0,0,0,.15);
-        }
-        .carousel-btn:hover { background: #fff; }
-        .carousel-prev { left: 1rem; }
-        .carousel-next { right: 1rem; }
-        .carousel-dots {
-            position: absolute;
-            bottom: 4.6rem;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: .5rem;
-            z-index: 10;
-            flex-wrap: wrap;
-            justify-content: center;
-            padding: 0 1rem;
-        }
-        .carousel-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: rgba(255,255,255,.4);
-            border: none;
-            cursor: pointer;
-            transition: background .2s;
-            padding: 0;
-        }
-        .carousel-dot.active { background: #fff; }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+      text-decoration: none;
+      font-weight: 900;
+    }
 
-        /* ── Price Table ── */
-        .price-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-            gap: .8rem;
-        }
-        .price-card {
-            background: #fafafa;
-            border: 2px solid #eee;
-            border-radius: 10px;
-            padding: 1.5rem 1rem;
-            text-align: center;
-            transition: border-color .2s;
-        }
-        .price-card:hover { border-color: var(--red); }
-        .price-card.featured {
-            border-color: var(--red);
-            background: #fff5f5;
-        }
-        .price-card .name { font-weight: 700; font-size: 1.1rem; margin-bottom: .3rem; }
-        .price-card .duration { font-size: .8rem; color: var(--muted); margin-bottom: .8rem; }
-        .price-card .money { font-size: 1.6rem; font-weight: 800; color: var(--red); }
-        .price-card .money span { font-size: .8rem; font-weight: 400; }
-        .price-card .scene { font-size: .8rem; color: var(--muted); margin-top: .5rem; }
+    .brand-mark {
+      width: 32px;
+      height: 32px;
+      border-radius: 9px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      background: var(--accent);
+      font-size: 16px;
+      font-weight: 900;
+      flex: 0 0 auto;
+    }
 
-        /* ── FAQ ── */
-        .faq-item {
-            border: 1px solid #eee;
-            border-radius: 10px;
-            margin-bottom: .8rem;
-            overflow: hidden;
-        }
-        .faq-q {
-            background: #fafafa;
-            padding: 1rem 1.2rem;
-            font-weight: 600;
-            font-size: .95rem;
-            cursor: default;
-            user-select: none;
-        }
-        .faq-a {
-            padding: 1rem 1.2rem;
-            font-size: .9rem;
-            color: var(--muted);
-            border-top: 1px solid #eee;
-        }
+    .brand span:last-child {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
 
-        /* ── Tech Table ── */
-        .tech-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: .6rem;
-        }
-        .tech-item {
-            background: #fafafa;
-            padding: .7rem 1rem;
-            border-radius: 8px;
-            text-align: center;
-            font-size: .85rem;
-        }
-        .tech-item strong { display: block; font-size: .95rem; margin-bottom: .1rem; }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      color: var(--muted);
+      font-size: 14px;
+    }
 
-        /* ── Footer CTA ── */
-        .footer-cta {
-            background: linear-gradient(135deg, #1a1a2e, #2d2d44);
-            color: #fff;
-            text-align: center;
-            padding: 3rem 2rem;
-            margin-top: 2rem;
-            border-radius: 12px;
-        }
-        .footer-cta h3 { font-size: 1.4rem; margin-bottom: .5rem; }
-        .footer-cta p { opacity: .8; margin-bottom: 1.5rem; }
-        .footer-cta a {
-            display: inline-block;
-            background: var(--red);
-            color: #fff;
-            padding: 14px 48px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 1.1rem;
-            transition: transform .15s;
-        }
-        .footer-cta a:hover { transform: scale(1.03); }
+    .nav-links a {
+      text-decoration: none;
+    }
 
-        /* ── Footer ── */
-        .site-footer {
-            text-align: center;
-            padding: 2rem 0;
-            color: #aaa;
-            font-size: .85rem;
-        }
-        .site-footer a { color: #999; text-decoration: none; }
+    .nav-links a:hover {
+      color: var(--accent-dark);
+    }
 
-        /* ── Responsive ── */
-        @media (max-width: 600px) {
-            .hero h1 { font-size: 1.7rem; }
-            .section { padding: 1.2rem; }
-            .price-grid { grid-template-columns: 1fr 1fr; }
-            .feature-grid { grid-template-columns: 1fr; }
-            .carousel-caption-bar { padding: .8rem 1rem; font-size: .85rem; }
-        }
-    </style>
+    .nav-cta {
+      padding: 8px 14px;
+      border-radius: 999px;
+      color: #fff !important;
+      background: var(--accent);
+      font-weight: 800;
+    }
+
+    main {
+      overflow: hidden;
+    }
+
+    .hero {
+      background: var(--surface);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .hero-inner {
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 66px 22px 52px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(360px, 530px);
+      gap: 46px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 10px;
+      border: 1px solid color-mix(in srgb, var(--accent) 28%, var(--line));
+      border-radius: 999px;
+      background: var(--surface-soft);
+      color: var(--accent-dark);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .hero h1 {
+      margin: 18px 0 18px;
+      max-width: 760px;
+      font-size: clamp(34px, 5vw, 58px);
+      line-height: 1.08;
+      letter-spacing: 0;
+    }
+
+    .hero p {
+      max-width: 650px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 18px;
+    }
+
+    .actions {
+      margin-top: 28px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      padding: 0 18px;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      text-decoration: none;
+      font-weight: 850;
+      transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 24px rgba(27, 31, 39, .10);
+      border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
+    }
+
+    .btn-primary {
+      color: #fff;
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .btn-secondary {
+      color: var(--text);
+      background: var(--surface);
+    }
+
+    .hero-note {
+      margin-top: 16px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .screen {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #111827;
+      box-shadow: var(--shadow);
+    }
+
+    .screen-bar {
+      height: 34px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 0 12px;
+      background: #202938;
+      border-bottom: 1px solid rgba(255, 255, 255, .08);
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #6b7280;
+    }
+
+    .dot:nth-child(1) {
+      background: #ff6b65;
+    }
+
+    .dot:nth-child(2) {
+      background: #ffbf47;
+    }
+
+    .dot:nth-child(3) {
+      background: #30c36b;
+    }
+
+    .screen img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .metric {
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--surface);
+    }
+
+    .metric strong {
+      display: block;
+      font-size: 18px;
+    }
+
+    .metric span {
+      display: block;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .section {
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 62px 22px 0;
+    }
+
+    .section-head {
+      max-width: 760px;
+      margin-bottom: 22px;
+    }
+
+    .section h2 {
+      margin: 0;
+      font-size: clamp(26px, 3vw, 38px);
+      line-height: 1.18;
+      letter-spacing: 0;
+    }
+
+    .section-head p {
+      margin: 10px 0 0;
+      color: var(--muted);
+    }
+
+    .grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .grid-4 {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .card {
+      min-height: 100%;
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+    }
+
+    .card h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .card .tag {
+      display: inline-block;
+      margin-bottom: 14px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--surface) 82%, var(--line));
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    .feature-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .feature-row {
+      padding: 16px 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+    }
+
+    .feature-row strong {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .feature-row span {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .showcase {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 340px;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .gallery {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: var(--surface);
+      box-shadow: 0 12px 36px rgba(27, 31, 39, .08);
+    }
+
+    .gallery img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .gallery-caption {
+      padding: 14px 16px;
+      border-top: 1px solid var(--line);
+      font-weight: 850;
+    }
+
+    .stack {
+      display: grid;
+      gap: 12px;
+    }
+
+    .mini-shot {
+      display: grid;
+      grid-template-columns: 96px 1fr;
+      gap: 12px;
+      align-items: center;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      text-decoration: none;
+    }
+
+    .mini-shot img {
+      width: 96px;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      border-radius: 9px;
+      border: 1px solid var(--line);
+    }
+
+    .mini-shot strong {
+      display: block;
+      font-size: 15px;
+    }
+
+    .mini-shot span {
+      display: block;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .steps {
+      counter-reset: step;
+      display: grid;
+      gap: 10px;
+    }
+
+    .step {
+      counter-increment: step;
+      display: grid;
+      grid-template-columns: 42px 1fr;
+      gap: 12px;
+      align-items: start;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+    }
+
+    .step::before {
+      content: counter(step);
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 10px;
+      color: #fff;
+      background: var(--accent);
+      font-weight: 900;
+    }
+
+    .step strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .step span {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .pricing {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+
+    .price {
+      position: relative;
+      padding: 22px 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+    }
+
+    .price.featured {
+      border-color: color-mix(in srgb, var(--accent) 50%, var(--line));
+      background: var(--surface-soft);
+    }
+
+    .price .name {
+      font-weight: 900;
+      font-size: 18px;
+    }
+
+    .price .money {
+      margin: 12px 0 4px;
+      color: var(--accent-dark);
+      font-size: 34px;
+      line-height: 1;
+      font-weight: 900;
+    }
+
+    .price .duration,
+    .price .scene {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .price .badge {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: var(--accent);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    .notice {
+      padding: 20px;
+      border: 1px solid color-mix(in srgb, var(--green) 32%, var(--line));
+      border-radius: var(--radius);
+      background: color-mix(in srgb, var(--green) 8%, var(--surface));
+      color: var(--text);
+    }
+
+    .notice strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--green);
+    }
+
+    .faq {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    details {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+    }
+
+    summary {
+      cursor: pointer;
+      padding: 16px 18px;
+      font-weight: 850;
+    }
+
+    details p {
+      margin: 0;
+      padding: 0 18px 18px;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .final-cta {
+      max-width: 1160px;
+      margin: 64px auto 0;
+      padding: 34px 22px;
+    }
+
+    .final-cta-inner {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 22px;
+      align-items: center;
+      padding: 28px;
+      border-radius: 18px;
+      background: #17181f;
+      color: #fff;
+    }
+
+    .final-cta h2 {
+      margin: 0 0 8px;
+      font-size: clamp(26px, 3vw, 36px);
+    }
+
+    .final-cta p {
+      margin: 0;
+      color: rgba(255, 255, 255, .74);
+    }
+
+    .footer {
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 24px 22px 44px;
+      color: var(--muted);
+      font-size: 14px;
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .footer a {
+      color: var(--muted);
+      text-decoration: none;
+      margin-left: 12px;
+    }
+
+    .footer a:hover {
+      color: var(--accent-dark);
+    }
+
+    @media (max-width: 900px) {
+      .hero-inner,
+      .showcase,
+      .final-cta-inner {
+        grid-template-columns: 1fr;
+      }
+
+      .grid-4,
+      .pricing,
+      .faq,
+      .feature-list {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .hero-inner {
+        padding-top: 46px;
+      }
+
+      .nav-links a:not(.nav-cta) {
+        display: none;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .nav {
+        padding: 12px 16px;
+      }
+
+      .hero-inner,
+      .section,
+      .final-cta,
+      .footer {
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+
+      .hero h1 {
+        font-size: 34px;
+      }
+
+      .hero p {
+        font-size: 16px;
+      }
+
+      .grid-4,
+      .pricing,
+      .faq,
+      .feature-list,
+      .metrics {
+        grid-template-columns: 1fr;
+      }
+
+      .mini-shot {
+        grid-template-columns: 82px 1fr;
+      }
+
+      .mini-shot img {
+        width: 82px;
+      }
+
+      .actions .btn {
+        width: 100%;
+      }
+
+      .footer a {
+        margin-left: 0;
+        margin-right: 12px;
+      }
+    }
+  </style>
 </head>
 <body>
+  <header class="site-header">
+    <nav class="nav" aria-label="主导航">
+      <a class="brand" href="#">
+        <span class="brand-mark">D</span>
+        <span>douyin_one_spider</span>
+      </a>
+      <div class="nav-links">
+        <a href="#features">功能</a>
+        <a href="#showcase">截图</a>
+        <a href="#pricing">价格</a>
+        <a href="https://github.com/mashukui/douyin_one_spider" target="_blank" rel="noopener">GitHub</a>
+        <a class="nav-cta" href="https://mgnb.pro/product/douyin" target="_blank" rel="noopener">开通使用</a>
+      </div>
+    </nav>
+  </header>
 
-<!-- ═══════════ Language Switcher ═══════════ -->
-<div class="lang-switcher">
-    <button class="lang-btn active" onclick="switchLang('zh-CN')">中文</button>
-    <button class="lang-btn" onclick="switchLang('en')">EN</button>
-</div>
-
-<!-- ═══════════ HERO ═══════════ -->
-<header class="hero">
-
-    <h1 class="lang-zh">🎵 抖音聚合采集</h1>
-    <h1 class="lang-en">🎵 Douyin One Spider</h1>
-
-    <p class="lang-zh">抖音数据一站式采集工具 — 支持关键词搜索作品、评论采集、主页作品采集、链接/UID转换，GUI 界面开箱即用</p>
-    <p class="lang-en">All-in-one Douyin data crawler — keyword search, comment scraping, profile posts, link/UID conversion. No Python setup required.</p>
-
-    <div class="badges lang-zh">
-        <span class="badge">🖥️ Windows + macOS</span>
-        <span class="badge">🚀 无需 Python 环境</span>
-        <span class="badge">📦 开箱即用</span>
-    </div>
-    <div class="badges lang-en">
-        <span class="badge">🖥️ Windows + macOS</span>
-        <span class="badge">🚀 No Python required</span>
-        <span class="badge">📦 Ready to use</span>
-    </div>
-
-    <a class="cta-btn" href="https://mgnb.pro/product/douyin" target="_blank">
-        <span class="lang-zh">💰 立即开通使用</span>
-        <span class="lang-en">💰 Get Started Now</span>
-    </a>
-    <span class="cta-sub lang-zh">日卡 ¥39 起 · 一机一码 · 持续更新维护</span>
-    <span class="cta-sub lang-en">Starting at ¥39/day · One device per license · Actively maintained</span>
-</header>
-
-<div class="container">
-
-<!-- ═══════════ 简介 ═══════════ -->
-<div class="section">
-    <h2>
-        <span class="lang-zh"><span class="icon">👋</span> 软件简介</span>
-        <span class="lang-en"><span class="icon">👋</span> Overview</span>
-    </h2>
-    <p class="lang-zh">
-        <strong>douyin_one_spider</strong> 是一款面向抖音数据采集场景的桌面 GUI 工具。
-        支持关键词搜索作品采集、指定作品评论采集、主页作品批量采集、链接/UID 互转等功能，
-        采集结果自动保存为 CSV 文件并支持下载视频。用户无需配置 Python 环境，下载客户端后登录即可使用。
-    </p>
-    <p class="lang-en">
-        <strong>douyin_one_spider</strong> is a desktop GUI tool for Douyin (TikTok China) data collection.
-        Supports keyword-based post search, comment scraping, profile post crawling, link/UID conversion,
-        and more — with CSV export and video download. No Python setup required.
-    </p>
-</div>
-
-<!-- ═══════════ 适用场景 ═══════════ -->
-<div class="section">
-    <h2>
-        <span class="lang-zh"><span class="icon">🎯</span> 适用场景</span>
-        <span class="lang-en"><span class="icon">🎯</span> Use Cases</span>
-    </h2>
-    <div class="feature-grid">
-        <div class="feature-card">
-            <h3><span class="lang-zh">🎣 获客截流</span><span class="lang-en">🎣 Lead Generation</span></h3>
-            <p class="lang-zh">通过关键词搜索精准定位目标用户，采集评论互动数据，挖掘潜在客户</p>
-            <p class="lang-en">Target users via keyword search, collect engagement data to identify leads</p>
+  <main>
+    <section class="hero">
+      <div class="hero-inner">
+        <div>
+          <span class="eyebrow">抖音采集桌面工具 · Windows/macOS</span>
+          <h1>抖音作品、评论、达人主页和链接转换，一套客户端完成。</h1>
+          <p>支持关键词作品采集、评论采集、主页作品采集、视频下载、链接转换和 CSV 导出。</p>
+          <div class="actions">
+            <a class="btn btn-primary" href="https://mgnb.pro/product/douyin" target="_blank" rel="noopener">立即开通使用</a>
+            <a class="btn btn-secondary" href="https://github.com/mashukui/douyin_one_spider/releases/" target="_blank" rel="noopener">下载最新版</a>
+            <a class="btn btn-secondary" href="https://www.bilibili.com/video/BV1tkiZBiEyn/" target="_blank" rel="noopener">查看演示</a>
+          </div>
+          <div class="hero-note">日卡 39 元起，一机一码授权，版本通过 GitHub Releases 持续发布。</div>
         </div>
-        <div class="feature-card">
-            <h3><span class="lang-zh">📊 舆情分析</span><span class="lang-en">📊 Sentiment Analysis</span></h3>
-            <p class="lang-zh">跟踪品牌或话题相关作品及评论，观察讨论趋势和用户态度</p>
-            <p class="lang-en">Track brand/topic-related posts and comments to monitor sentiment trends</p>
-        </div>
-        <div class="feature-card">
-            <h3><span class="lang-zh">🎬 内容创作</span><span class="lang-en">🎬 Content Creation</span></h3>
-            <p class="lang-zh">分析热门作品的评论区高频话题和观众兴趣点，指导内容选题</p>
-            <p class="lang-en">Analyze trending post comments to discover hot topics and guide content strategy</p>
-        </div>
-        <div class="feature-card">
-            <h3><span class="lang-zh">📈 抖音运营</span><span class="lang-en">📈 Douyin Operations</span></h3>
-            <p class="lang-zh">批量采集竞品账号作品数据，分析发布规律和互动表现，优化运营策略</p>
-            <p class="lang-en">Batch-crawl competitor posts to analyze publishing patterns and engagement</p>
-        </div>
-    </div>
-</div>
 
-<!-- ═══════════ 功能概览 ═══════════ -->
-<div class="section">
-    <h2>
-        <span class="lang-zh"><span class="icon">⚙️</span> 功能概览</span>
-        <span class="lang-en"><span class="icon">⚙️</span> Features</span>
-    </h2>
-    <div class="feature-grid">
-        <div class="feature-card">
-            <h3>✅ <span class="lang-zh">关键词作品采集</span><span class="lang-en">Keyword Search</span></h3>
-            <p class="lang-zh">输入关键词搜索抖音作品，支持多关键词批量采集</p>
-            <p class="lang-en">Search Douyin posts by keywords with batch keyword support</p>
+        <div aria-label="软件界面预览">
+          <div class="screen">
+            <div class="screen-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+            <img src="images/s01.jpg" alt="抖音评论采集界面">
+          </div>
+          <div class="metrics">
+            <div class="metric"><strong>4 类</strong><span>核心采集模式</span></div>
+            <div class="metric"><strong>CSV</strong><span>结构化导出</span></div>
+            <div class="metric"><strong>免环境</strong><span>无需安装 Python</span></div>
+          </div>
         </div>
-        <div class="feature-card">
-            <h3>✅ <span class="lang-zh">评论采集</span><span class="lang-en">Comment Crawling</span></h3>
-            <p class="lang-zh">采集指定作品的评论数据，包括评论内容、用户、点赞数等</p>
-            <p class="lang-en">Crawl comments from specified posts with author, likes, and content</p>
+      </div>
+    </section>
+
+    <section id="features" class="section">
+      <div class="section-head">
+        <h2>核心功能</h2>
+        <p>围绕抖音公开内容整理流程设计：先按关键词找作品，再整理评论、达人主页、视频文件和链接格式。</p>
+      </div>
+      <div class="grid grid-4">
+        <article class="card">
+          <span class="tag">关键词</span>
+          <h3>搜索作品采集</h3>
+          <p>按关键词搜索抖音作品，整理标题、作者、发布时间和互动数据。</p>
+        </article>
+        <article class="card">
+          <span class="tag">评论</span>
+          <h3>评论采集</h3>
+          <p>采集指定作品或搜索结果作品下的评论内容、评论者和互动信息。</p>
+        </article>
+        <article class="card">
+          <span class="tag">主页</span>
+          <h3>主页作品采集</h3>
+          <p>输入达人主页链接，批量整理公开作品列表，并可按需下载视频文件。</p>
+        </article>
+        <article class="card">
+          <span class="tag">转换</span>
+          <h3>链接与 UID 转换</h3>
+          <p>支持主页链接、抖音号、UID、App 分享链接和 PC 链接之间的常见格式转换。</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <h2>适合哪些使用场景</h2>
+        <p>页面只描述公开数据整理和导出能力，不承诺绕过平台权限、风控或访问限制。</p>
+      </div>
+      <div class="feature-list">
+        <div class="feature-row"><strong>关键词选题调研</strong><span>了解某个关键词下的相关作品、标题方向、互动数据和发布时间。</span></div>
+        <div class="feature-row"><strong>评论线索整理</strong><span>批量导出评论内容、评论者信息和评论时间，便于后续处理。</span></div>
+        <div class="feature-row"><strong>竞品内容观察</strong><span>跟踪同行账号的公开作品列表、更新节奏和互动表现。</span></div>
+        <div class="feature-row"><strong>达人主页盘点</strong><span>整理指定达人主页的公开作品、发布时间、互动表现和视频文件。</span></div>
+        <div class="feature-row"><strong>链接格式处理</strong><span>将 App 分享链接、PC 链接、主页链接、抖音号和 UID 做统一整理。</span></div>
+        <div class="feature-row"><strong>公开作品归档</strong><span>保存公开作品的基础信息、视频直链或本地视频文件，便于内部复盘。</span></div>
+      </div>
+    </section>
+
+    <section id="showcase" class="section">
+      <div class="section-head">
+        <h2>界面与结果展示</h2>
+        <p>以下截图展示主要模块的界面和导出结果。详细字段、Cookie 说明和反馈格式请查看 GitHub README。</p>
+      </div>
+      <div class="showcase">
+        <div class="gallery">
+          <img src="images/s02.png" alt="抖音关键词搜索作品采集结果">
+          <div class="gallery-caption">搜索作品结果：标题、作者、主页链接、发布时间和互动数据等字段</div>
         </div>
-        <div class="feature-card">
-            <h3>✅ <span class="lang-zh">主页作品采集</span><span class="lang-en">Profile Posts</span></h3>
-            <p class="lang-zh">批量采集指定用户主页的全部作品数据</p>
-            <p class="lang-en">Batch-crawl all posts from a specified user profile</p>
+        <div class="stack">
+          <a class="mini-shot" href="images/s01.jpg" target="_blank" rel="noopener">
+            <img src="images/s01.jpg" alt="抖音评论采集界面">
+            <span><strong>评论采集</strong><span>作品评论和评论者信息</span></span>
+          </a>
+          <a class="mini-shot" href="images/s03.png" target="_blank" rel="noopener">
+            <img src="images/s03.png" alt="抖音评论采集结果">
+            <span><strong>评论结果</strong><span>评论内容、时间和点赞数</span></span>
+          </a>
+          <a class="mini-shot" href="images/s04.jpg" target="_blank" rel="noopener">
+            <img src="images/s04.jpg" alt="抖音主页作品采集界面">
+            <span><strong>主页作品</strong><span>达人公开作品列表</span></span>
+          </a>
+          <a class="mini-shot" href="images/s05.png" target="_blank" rel="noopener">
+            <img src="images/s05.png" alt="抖音主页作品采集结果">
+            <span><strong>主页结果</strong><span>作品列表和互动字段</span></span>
+          </a>
+          <a class="mini-shot" href="images/s06.png" target="_blank" rel="noopener">
+            <img src="images/s06.png" alt="抖音视频下载文件">
+            <span><strong>视频下载</strong><span>按任务保存视频文件</span></span>
+          </a>
+          <a class="mini-shot" href="images/s07.jpg" target="_blank" rel="noopener">
+            <img src="images/s07.jpg" alt="抖音主页链接转抖音号">
+            <span><strong>链接转换</strong><span>主页链接、抖音号和 UID</span></span>
+          </a>
+          <a class="mini-shot" href="images/s08.jpg" target="_blank" rel="noopener">
+            <img src="images/s08.jpg" alt="抖音号转主页链接">
+            <span><strong>抖音号转换</strong><span>抖音号转主页链接</span></span>
+          </a>
+          <a class="mini-shot" href="images/s09.jpg" target="_blank" rel="noopener">
+            <img src="images/s09.jpg" alt="App 端作品链接转 PC 端作品链接">
+            <span><strong>作品链接转换</strong><span>App 链接转 PC 链接</span></span>
+          </a>
         </div>
-        <div class="feature-card">
-            <h3>✅ <span class="lang-zh">链接/UID 转换</span><span class="lang-en">Link/UID Converter</span></h3>
-            <p class="lang-zh">支持主页链接↔抖音号互转、App端链接↔PC端链接互转</p>
-            <p class="lang-en">Convert between profile links, Douyin IDs, App/PC URLs</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <h2>使用流程</h2>
+        <p>客户端已经打包好运行环境，主要工作是下载、配置 Cookie、选择模块并等待结果导出。</p>
+      </div>
+      <div class="steps">
+        <div class="step"><div><strong>下载客户端</strong><span>从 GitHub Releases 下载最新版 Windows 或 macOS 客户端。</span></div></div>
+        <div class="step"><div><strong>配置 Cookie</strong><span>使用软件内置 Cookie 小工具获取自己的抖音账号登录态。</span></div></div>
+        <div class="step"><div><strong>登录授权</strong><span>使用购买后获得的卡密登录软件，一机一码授权。</span></div></div>
+        <div class="step"><div><strong>选择模块</strong><span>输入关键词、作品链接、达人主页链接、抖音号或 UID。</span></div></div>
+        <div class="step"><div><strong>查看结果</strong><span>采集完成后，在软件所在目录查看 CSV、视频文件和日志文件。</span></div></div>
+      </div>
+    </section>
+
+    <section id="pricing" class="section">
+      <div class="section-head">
+        <h2>价格与授权</h2>
+        <p>价格用于快速了解授权周期。实际开通、支付和售后说明以 mgnb.pro 商品页为准。</p>
+      </div>
+      <div class="pricing">
+        <div class="price">
+          <div class="name">日卡</div>
+          <div class="money">¥39</div>
+          <div class="duration">使用期限 1 天</div>
+          <div class="scene">临时试用、小批量任务</div>
         </div>
-        <div class="feature-card">
-            <h3>✅ <span class="lang-zh">自动保存</span><span class="lang-en">Auto-save</span></h3>
-            <p class="lang-zh">采集过程中每页即时保存，中断不丢数据</p>
-            <p class="lang-en">Instant per-page saving during crawling to prevent data loss</p>
+        <div class="price featured">
+          <span class="badge">常用</span>
+          <div class="name">月卡</div>
+          <div class="money">¥149</div>
+          <div class="duration">使用期限 1 个月</div>
+          <div class="scene">短期采集需求</div>
         </div>
-        <div class="feature-card">
-            <h3>✅ <span class="lang-zh">运行日志</span><span class="lang-en">Activity Log</span></h3>
-            <p class="lang-zh">自动记录运行过程，方便事后排查问题</p>
-            <p class="lang-en">Detailed logs for troubleshooting</p>
+        <div class="price">
+          <div class="name">季卡</div>
+          <div class="money">¥399</div>
+          <div class="duration">使用期限 3 个月</div>
+          <div class="scene">中期采集需求</div>
         </div>
-    </div>
-</div>
-
-<!-- ═══════════ 快速开始 ═══════════ -->
-<div class="section">
-    <h2>
-        <span class="lang-zh"><span class="icon">🚀</span> 快速开始</span>
-        <span class="lang-en"><span class="icon">🚀</span> Quick Start</span>
-    </h2>
-    <div class="steps lang-zh">
-        <div class="step"><div class="step-num"></div><div class="step-body"><h4>下载软件</h4><p>前往 <a href="https://github.com/mashukui/douyin_one_spider/releases/" target="_blank">GitHub Releases</a> 下载最新版客户端</p></div></div>
-        <div class="step"><div class="step-num"></div><div class="step-body"><h4>解压运行</h4><p>解压后双击运行对应系统的客户端（Windows 或 macOS）</p></div></div>
-        <div class="step"><div class="step-num"></div><div class="step-body"><h4>登录账号</h4><p>使用购买后获得的卡密登录软件</p></div></div>
-        <div class="step"><div class="step-num"></div><div class="step-body"><h4>配置 Cookie</h4><p>使用软件内置的 Cookie 小工具，扫码或手动配置抖音 Cookie</p></div></div>
-        <div class="step"><div class="step-num"></div><div class="step-body"><h4>设置采集参数</h4><p>根据需要选择采集模式（关键词/评论/主页），填写目标信息</p></div></div>
-        <div class="step"><div class="step-num"></div><div class="step-body"><h4>开始采集</h4><p>点击「开始执行」，等待采集完成。可查看 <a href="https://www.bilibili.com/video/BV1tkiZBiEyn/" target="_blank">B站演示视频</a> 参考操作</p></div></div>
-        <div class="step"><div class="step-num"></div><div class="step-body"><h4>查看结果</h4><p>在软件所在目录查看 CSV 结果文件和运行日志</p></div></div>
-    </div>
-    <div class="steps lang-en">
-        <div class="step"><div class="step-num"></div><div class="step-body"><h4>Download</h4><p>Get the latest release from <a href="https://github.com/mashukui/douyin_one_spider/releases/" target="_blank">GitHub Releases</a></p></div></div>
-        <div class="step"><div class="step-num"></div><div class="step-body"><h4>Extract & Run</h4><p>Unzip and launch the client for your OS (Windows or macOS)</p></div></div>
-        <div class="step"><div class="step-num"></div><div class="step-body"><h4>Login</h4><p>Log in using the license key from your purchase</p></div></div>
-        <div class="step"><div class="step-num"></div><div class="step-body"><h4>Configure Cookie</h4><p>Use the built-in cookie tool to scan QR or manually set your Douyin cookie</p></div></div>
-        <div class="step"><div class="step-num"></div><div class="step-body"><h4>Set Parameters</h4><p>Choose crawl mode (keyword/comment/profile) and fill in target info</p></div></div>
-        <div class="step"><div class="step-num"></div><div class="step-body"><h4>Start Crawling</h4><p>Click "Start" and wait. Watch the <a href="https://www.bilibili.com/video/BV1tkiZBiEyn/" target="_blank">Bilibili demo</a> for reference</p></div></div>
-        <div class="step"><div class="step-num"></div><div class="step-body"><h4>View Results</h4><p>Open the CSV files and logs in the app directory</p></div></div>
-    </div>
-</div>
-
-<!-- ═══════════ 截图展示 ═══════════ -->
-<div class="section">
-    <h2>
-        <span class="lang-zh"><span class="icon">🖼️</span> 功能展示</span>
-        <span class="lang-en"><span class="icon">🖼️</span> Screenshots</span>
-    </h2>
-    <div class="carousel" id="carousel">
-        <div class="carousel-track" id="carouselTrack">
-            <div class="carousel-slide">
-                <img src="images/s01.jpg" alt="采集评论界面">
-            </div>
-            <div class="carousel-slide">
-                <img src="images/s02.png" alt="搜索作品结果">
-            </div>
-            <div class="carousel-slide">
-                <img src="images/s03.png" alt="评论采集结果">
-            </div>
-            <div class="carousel-slide">
-                <img src="images/s04.jpg" alt="主页作品采集界面">
-            </div>
-            <div class="carousel-slide">
-                <img src="images/s05.png" alt="主页作品结果">
-            </div>
-            <div class="carousel-slide">
-                <img src="images/s06.png" alt="自动下载视频">
-            </div>
-            <div class="carousel-slide">
-                <img src="images/s07.jpg" alt="主页链接转抖音号">
-            </div>
-            <div class="carousel-slide">
-                <img src="images/s08.jpg" alt="抖音号转主页链接">
-            </div>
-            <div class="carousel-slide">
-                <img src="images/s09.jpg" alt="App端转PC端">
-            </div>
+        <div class="price">
+          <div class="name">年卡</div>
+          <div class="money">¥799</div>
+          <div class="duration">使用期限 1 年</div>
+          <div class="scene">长期稳定使用</div>
         </div>
-        <button class="carousel-btn carousel-prev" onclick="moveSlide(-1)">◀</button>
-        <button class="carousel-btn carousel-next" onclick="moveSlide(1)">▶</button>
-        <div class="carousel-dots" id="carouselDots">
-            <button class="carousel-dot active" onclick="goToSlide(0)"></button>
-            <button class="carousel-dot" onclick="goToSlide(1)"></button>
-            <button class="carousel-dot" onclick="goToSlide(2)"></button>
-            <button class="carousel-dot" onclick="goToSlide(3)"></button>
-            <button class="carousel-dot" onclick="goToSlide(4)"></button>
-            <button class="carousel-dot" onclick="goToSlide(5)"></button>
-            <button class="carousel-dot" onclick="goToSlide(6)"></button>
-            <button class="carousel-dot" onclick="goToSlide(7)"></button>
-            <button class="carousel-dot" onclick="goToSlide(8)"></button>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="notice">
+        <strong>合规使用说明</strong>
+        本工具仅用于合法合规的数据整理、学习研究和自有业务场景。请使用自己的抖音账号 Cookie，合理控制采集频率，不要采集、传播或售卖个人敏感信息，并自行遵守目标平台服务协议、隐私政策及所在地法律法规。
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <h2>常见问题</h2>
+        <p>这里回答购买前最常见的问题。更细的字段说明、视频下载说明和反馈格式请查看 GitHub README。</p>
+      </div>
+      <div class="faq">
+        <details open>
+          <summary>是否需要安装 Python？</summary>
+          <p>不需要。软件已经打包为桌面客户端，下载对应系统版本后即可运行。</p>
+        </details>
+        <details>
+          <summary>Cookie 是做什么用的？</summary>
+          <p>Cookie 用于让软件以当前账号状态访问平台公开数据。请使用自己的抖音账号 Cookie。</p>
+        </details>
+        <details>
+          <summary>视频下载失败怎么办？</summary>
+          <p>请检查作品链接是否有效、网络是否正常、输出目录是否可写，以及当前账号是否具备访问该作品的权限。</p>
+        </details>
+        <details>
+          <summary>采集中断后数据会丢失吗？</summary>
+          <p>软件会在采集过程中持续保存结果，已完成部分通常会保留在 CSV 文件中。</p>
+        </details>
+      </div>
+    </section>
+
+    <section class="final-cta">
+      <div class="final-cta-inner">
+        <div>
+          <h2>准备整理抖音公开数据？</h2>
+          <p>先看演示或下载最新版，也可以直接进入商品页开通授权。</p>
         </div>
-        <div class="carousel-caption-bar" id="carouselCaption">📥 采集评论界面：输入作品链接，一键启动评论采集</div>
-    </div>
-</div>
-
-<!-- ═══════════ 输出字段 ═══════════ -->
-<div class="section">
-    <h2>
-        <span class="lang-zh"><span class="icon">📊</span> 输出数据说明</span>
-        <span class="lang-en"><span class="icon">📊</span> Output Fields</span>
-    </h2>
-    <p class="lang-zh" style="margin-bottom:1rem;">采集完成后生成结构化 CSV 文件，根据采集模式包含以下字段：</p>
-    <p class="lang-en" style="margin-bottom:1rem;">After crawling, structured CSV files are generated with the following fields by mode:</p>
-    <div class="feature-grid">
-        <div class="feature-card">
-            <h3><span class="lang-zh">🔍 搜索作品数据</span><span class="lang-en">🔍 Search Results</span></h3>
-            <p class="lang-zh">关键词、作品标题、作者昵称、抖音号、点赞数、评论数、分享数、发布时间、作品链接</p>
-            <p class="lang-en">Keyword, post title, author, Douyin ID, likes, comments, shares, publish time, post URL</p>
+        <div class="actions">
+          <a class="btn btn-primary" href="https://mgnb.pro/product/douyin" target="_blank" rel="noopener">开通使用</a>
+          <a class="btn btn-secondary" href="https://github.com/mashukui/douyin_one_spider/blob/main/README.md" target="_blank" rel="noopener">查看说明</a>
         </div>
-        <div class="feature-card">
-            <h3><span class="lang-zh">💬 评论数据</span><span class="lang-en">💬 Comment Data</span></h3>
-            <p class="lang-zh">评论内容、评论者昵称、评论者抖音号、点赞数、回复数、发布时间、评论 ID</p>
-            <p class="lang-en">Comment text, commenter name, Douyin ID, likes, replies, publish time, comment ID</p>
-        </div>
-        <div class="feature-card">
-            <h3><span class="lang-zh">🏠 主页作品数据</span><span class="lang-en">🏠 Profile Posts</span></h3>
-            <p class="lang-zh">作品标题、作品链接、点赞数、评论数、分享数、发布时间、封面图链接</p>
-            <p class="lang-en">Post title, post URL, likes, comments, shares, publish time, cover image URL</p>
-        </div>
-        <div class="feature-card">
-            <h3><span class="lang-zh">🔗 转换数据</span><span class="lang-en">🔗 Conversion Data</span></h3>
-            <p class="lang-zh">原始链接/ID、转换后链接/ID、转换类型（主页→抖音号/抖音号→主页/App→PC）</p>
-            <p class="lang-en">Original link/ID, converted link/ID, conversion type (profile→ID / ID→profile / App→PC)</p>
-        </div>
-    </div>
-</div>
+      </div>
+    </section>
+  </main>
 
-<!-- ═══════════ 价格 ═══════════ -->
-<div class="section">
-    <h2>
-        <span class="lang-zh"><span class="icon">💰</span> 价格说明</span>
-        <span class="lang-en"><span class="icon">💰</span> Pricing</span>
-    </h2>
-    <!-- prices are the same in both languages so no duplication needed -->
-    <div class="price-grid">
-        <div class="price-card">
-            <div class="name lang-zh">日卡</div><div class="name lang-en">Daily</div>
-            <div class="duration lang-zh">使用期限 1 天</div><div class="duration lang-en">1 day</div>
-            <div class="money">¥39</div>
-            <div class="scene lang-zh">临时试用、小批量任务</div>
-            <div class="scene lang-en">Trial / small tasks</div>
-        </div>
-        <div class="price-card featured">
-            <div class="name lang-zh">月卡</div><div class="name lang-en">Monthly</div>
-            <div class="duration lang-zh">使用期限 1 个月</div><div class="duration lang-en">1 month</div>
-            <div class="money">¥149</div>
-            <div class="scene lang-zh">⭐ 短期采集需求</div>
-            <div class="scene lang-en">⭐ Short-term needs</div>
-        </div>
-        <div class="price-card">
-            <div class="name lang-zh">季卡</div><div class="name lang-en">Quarterly</div>
-            <div class="duration lang-zh">使用期限 3 个月</div><div class="duration lang-en">3 months</div>
-            <div class="money">¥399</div>
-            <div class="scene lang-zh">中期采集需求</div>
-            <div class="scene lang-en">Medium-term needs</div>
-        </div>
-        <div class="price-card">
-            <div class="name lang-zh">年卡</div><div class="name lang-en">Yearly</div>
-            <div class="duration lang-zh">使用期限 1 年</div><div class="duration lang-en">1 year</div>
-            <div class="money">¥799</div>
-            <div class="scene lang-zh">长期稳定使用</div>
-            <div class="scene lang-en">Long-term use</div>
-        </div>
-    </div>
-    <p style="text-align:center;margin-top:1.2rem;">
-        <a href="https://mgnb.pro/product/douyin" target="_blank" style="color:var(--red);font-weight:600;">
-            <span class="lang-zh">👉 立即开通</span>
-            <span class="lang-en">👉 Purchase Now</span>
-        </a>
-    </p>
-</div>
-
-<!-- ═══════════ 技术说明 ═══════════ -->
-<div class="section">
-    <h2>
-        <span class="lang-zh"><span class="icon">🛠️</span> 技术说明</span>
-        <span class="lang-en"><span class="icon">🛠️</span> Tech Stack</span>
-    </h2>
-    <p class="lang-zh" style="margin-bottom:1rem;">采用 Python 开发，通过接口请求采集数据，不依赖浏览器自动化：</p>
-    <p class="lang-en" style="margin-bottom:1rem;">Built with Python. Data is fetched via API — no browser automation required:</p>
-    <div class="tech-grid">
-        <div class="tech-item"><strong>tkinter</strong><span class="lang-zh">GUI 界面</span><span class="lang-en">GUI</span></div>
-        <div class="tech-item"><strong>requests</strong><span class="lang-zh">接口请求</span><span class="lang-en">HTTP client</span></div>
-        <div class="tech-item"><strong>json</strong><span class="lang-zh">数据解析</span><span class="lang-en">Data parsing</span></div>
-        <div class="tech-item"><strong>csv</strong><span class="lang-zh">数据导出</span><span class="lang-en">CSV export</span></div>
-        <div class="tech-item"><strong>logging</strong><span class="lang-zh">日志记录</span><span class="lang-en">Activity log</span></div>
-    </div>
-</div>
-
-<!-- ═══════════ 授权规则 ═══════════ -->
-<div class="section">
-    <h2>
-        <span class="lang-zh"><span class="icon">🔐</span> 授权规则</span>
-        <span class="lang-en"><span class="icon">🔐</span> License</span>
-    </h2>
-    <ul style="padding-left:1.2rem;line-height:2;list-style:none;">
-        <li class="lang-zh">🔑 一机一码机制，一个卡密仅支持一台电脑使用</li>
-        <li class="lang-en">🔑 One license per device — each key works on a single computer</li>
-        <li class="lang-zh">🚫 一台电脑仅允许运行一个软件实例，不支持多开</li>
-        <li class="lang-en">🚫 Single instance only — no multi-launch on the same computer</li>
-        <li class="lang-zh">🔄 软件由作者长期维护，后续版本通过 <a href="https://github.com/mashukui/douyin_one_spider/releases/" target="_blank">GitHub Releases</a> 发布</li>
-        <li class="lang-en">🔄 Actively maintained — new versions released via <a href="https://github.com/mashukui/douyin_one_spider/releases/" target="_blank">GitHub Releases</a></li>
-    </ul>
-</div>
-
-<!-- ═══════════ FAQ ═══════════ -->
-<div class="section">
-    <h2>
-        <span class="lang-zh"><span class="icon">❓</span> 常见问题</span>
-        <span class="lang-en"><span class="icon">❓</span> FAQ</span>
-    </h2>
-
-    <div class="faq-item lang-zh">
-        <div class="faq-q">🟢 是否需要安装 Python？</div>
-        <div class="faq-a">不需要。软件已打包为桌面客户端，下载对应系统版本后即可运行。</div>
-    </div>
-    <div class="faq-item lang-en">
-        <div class="faq-q">🟢 Do I need to install Python?</div>
-        <div class="faq-a">No. The software is packaged as a standalone desktop app — just download and run.</div>
-    </div>
-
-    <div class="faq-item lang-zh">
-        <div class="faq-q">🟢 如何配置 Cookie？</div>
-        <div class="faq-a">软件内置 Cookie 小工具，支持扫码登录获取或手动粘贴 Cookie 字符串，操作简单。</div>
-    </div>
-    <div class="faq-item lang-en">
-        <div class="faq-q">🟢 How do I configure the cookie?</div>
-        <div class="faq-a">The app has a built-in cookie utility — scan QR to log in or manually paste your cookie string.</div>
-    </div>
-
-    <div class="faq-item lang-zh">
-        <div class="faq-q">🟢 采集中断后数据会丢失吗？</div>
-        <div class="faq-a">不会。软件在采集过程中每页即时保存结果，网络异常或任务中断不会丢失已采集的数据。</div>
-    </div>
-    <div class="faq-item lang-en">
-        <div class="faq-q">🟢 Will I lose data if crawling is interrupted?</div>
-        <div class="faq-a">No. Results are saved per page instantly — network issues or interruptions won't wipe collected data.</div>
-    </div>
-
-    <div class="faq-item lang-zh">
-        <div class="faq-q">🟢 支持导出哪些格式？</div>
-        <div class="faq-a">支持导出 CSV 文件和视频文件。CSV 可用 Excel / WPS / Numbers 直接打开，视频为无水印 MP4 格式。</div>
-    </div>
-    <div class="faq-item lang-en">
-        <div class="faq-q">🟢 What export formats are supported?</div>
-        <div class="faq-a">CSV files and video files. CSV opens in Excel / WPS / Numbers. Videos are watermark-free MP4 format.</div>
-    </div>
-</div>
-
-<!-- ═══════════ 底部 CTA ═══════════ -->
-<div class="footer-cta">
-    <h3 class="lang-zh">🎵 准备好开始了吗？</h3>
-    <h3 class="lang-en">🎵 Ready to get started?</h3>
-    <p class="lang-zh">日卡仅需 ¥39，立即体验抖音数据一站式采集</p>
-    <p class="lang-en">Start at just ¥39/day — try Douyin data crawling today</p>
-    <a href="https://mgnb.pro/product/douyin" target="_blank">
-        <span class="lang-zh">💰 立即开通使用</span>
-        <span class="lang-en">💰 Get Started Now</span>
-    </a>
-</div>
-
-<!-- ═══════════ Footer ═══════════ -->
-<div class="site-footer">
-    <p>© 2026 马哥python说 · Powered by <a href="https://pages.github.com/" target="_blank">GitHub Pages</a></p>
-    <p style="margin-top:.3rem;">
-        <a href="https://github.com/mashukui/douyin_one_spider" target="_blank">
-            <span class="lang-zh">GitHub 仓库</span><span class="lang-en">GitHub Repo</span>
-        </a> ·
-        <a href="https://github.com/mashukui/douyin_one_spider/releases/" target="_blank">
-            <span class="lang-zh">版本下载</span><span class="lang-en">Releases</span>
-        </a> ·
-        <a href="https://www.bilibili.com/video/BV1tkiZBiEyn/" target="_blank">
-            <span class="lang-zh">B站演示</span><span class="lang-en">Bilibili Demo</span>
-        </a> ·
-        <a href="https://mgnb.pro/product/douyin" target="_blank">
-            <span class="lang-zh">开通使用</span><span class="lang-en">Purchase</span>
-        </a>
-    </p>
-</div>
-
-</div>
-
-<script>
-var currentSlide = 0;
-var totalSlides = 9;
-var track = document.getElementById('carouselTrack');
-var dots = document.querySelectorAll('.carousel-dot');
-var caption = document.getElementById('carouselCaption');
-var autoTimer;
-var captions = [
-    { zh: '📥 采集评论界面：输入作品链接，一键启动评论采集', en: '📥 Comment Crawler GUI — paste post URL, start with one click' },
-    { zh: '🔍 关键词搜索作品：支持多关键词，自动翻页采集全部结果', en: '🔍 Keyword search results — multi-keyword, auto-pagination' },
-    { zh: '💬 评论采集结果：结构化 CSV 数据，含评论内容、用户、点赞数等', en: '💬 Comment crawl results — structured CSV with content, user, likes' },
-    { zh: '🏠 主页作品采集界面：输入用户主页链接，批量抓取全部作品', en: '🏠 Profile post crawler — input profile URL, batch-fetch all posts' },
-    { zh: '📊 主页作品采集结果：作品标题、点赞、评论、分享等完整数据', en: '📊 Profile post results — titles, likes, comments, shares, and more' },
-    { zh: '📹 自动下载视频：采集作品数据的同时可选下载无水印视频', en: '📹 Auto video download — optionally download watermark-free videos' },
-    { zh: '🔗 主页链接转抖音号：批量将用户主页链接转换为抖音号', en: '🔗 Profile link → Douyin ID — batch convert profile URLs to IDs' },
-    { zh: '🔄 抖音号转主页链接：批量将抖音号转换为主页链接', en: '🔄 Douyin ID → Profile link — batch convert IDs to profile URLs' },
-    { zh: '📱 App 端链接转 PC 端：批量将 App 分享链接转为 PC 网页链接', en: '📱 App → PC link — batch convert App share links to PC web URLs' }
-];
-
-function updateCarousel() {
-    track.style.transform = 'translateX(-' + (currentSlide * 100) + '%)';
-    dots.forEach(function(d, i) { d.classList.toggle('active', i === currentSlide); });
-    var lang = document.documentElement.getAttribute('lang') === 'en' ? 'en' : 'zh';
-    caption.textContent = captions[currentSlide][lang];
-}
-function moveSlide(dir) {
-    currentSlide = (currentSlide + dir + totalSlides) % totalSlides;
-    updateCarousel();
-    resetAuto();
-}
-function goToSlide(n) {
-    currentSlide = n;
-    updateCarousel();
-    resetAuto();
-}
-function resetAuto() {
-    clearInterval(autoTimer);
-    autoTimer = setInterval(function() { moveSlide(1); }, 5000);
-}
-var touchStartX = 0;
-track.addEventListener('touchstart', function(e) { touchStartX = e.touches[0].clientX; });
-track.addEventListener('touchend', function(e) {
-    var diff = touchStartX - e.changedTouches[0].clientX;
-    if (Math.abs(diff) > 50) moveSlide(diff > 0 ? 1 : -1);
-});
-autoTimer = setInterval(function() { moveSlide(1); }, 5000);
-
-function switchLang(lang) {
-    document.documentElement.setAttribute('lang', lang);
-    document.querySelectorAll('.lang-btn').forEach(function(btn) {
-        btn.classList.toggle('active',
-            btn.textContent.trim() === (lang === 'zh-CN' ? '中文' : 'EN'));
-    });
-    updateCarousel();
-    // save preference
-    try { localStorage.setItem('douyin-spider-lang', lang); } catch(e) {}
-}
-// load saved preference, default to zh-CN
-(function() {
-    var saved = 'zh-CN';
-    try { saved = localStorage.getItem('douyin-spider-lang') || 'zh-CN'; } catch(e) {}
-    switchLang(saved);
-})();
-</script>
-
+  <footer class="footer">
+    <span>© 2026 马哥python说 · Powered by GitHub Pages</span>
+    <span>
+      <a href="https://github.com/mashukui/douyin_one_spider" target="_blank" rel="noopener">GitHub 仓库</a>
+      <a href="https://github.com/mashukui/douyin_one_spider/releases/" target="_blank" rel="noopener">版本下载</a>
+      <a href="https://www.bilibili.com/video/BV1tkiZBiEyn/" target="_blank" rel="noopener">使用演示</a>
+      <a href="https://mgnb.pro/product/douyin" target="_blank" rel="noopener">开通使用</a>
+    </span>
+  </footer>
 </body>
 </html>
