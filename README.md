@@ -2,7 +2,7 @@
 
 > 🔥 抖音聚合采集软件：GUI 界面开箱即用，支持关键词作品采集、评论采集、主页作品采集、链接与 uid 转换。
 
-[⬇️ 下载最新版](https://github.com/mashukui/douyin_one_spider/releases/) | [🎬 使用演示](https://www.bilibili.com/video/BV1tkiZBiEyn/) | [💳 开通使用](https://mgnb.pro/product/douyin)
+[⬇️ 下载最新版](https://github.com/mashukui/douyin_one_spider/releases/) | [🎬 使用演示](https://www.bilibili.com/video/BV1tkiZBiEyn/) | [🏠产品主页](https://mashukui.github.io/douyin_one_spider/) | [💳 开通使用](https://mgnb.pro/product/douyin)
 
 本仓库用于软件介绍、版本发布、使用说明和问题反馈。软件暂不开放完整源码，可在[Releases下载](https://github.com/mashukui/douyin_one_spider/releases/) Windows / macOS 客户端使用。
 
